@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="rylogix - playful, premium links and mini-portfolio hub. Find projects, socials, and more."
+    />
+    <meta name="theme-color" content="#14141b" />
+    <meta property="og:title" content="Rylogix - Portfolio" />
+    <meta
+      property="og:description"
+      content="A playful, premium links hub with projects and socials."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://rylogix.com" />
+
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='0.9em' font-size='90'%3E%F0%9F%8C%9F%3C/text%3E%3C/svg%3E"
+    />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Inter:wght@400;500;600&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Inter:wght@400;500;600&display=swap"
+    />
+
+    <link rel="stylesheet" href="css/styles.css" />
+    <title>Rylogix Portfolio</title>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="container topbar-inner">
+        <div class="brand">
+          <span class="brand-name">Rylogix Portfolio</span>
+        </div>
+        <nav class="topbar-nav">
+          <a href="#links">Links</a>
+          <a href="#about">About</a>
+          <a href="#projects">Projects</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" id="top">
+        <div class="container hero-inner">
+          <div class="hero-card">
+            <img
+              class="avatar"
+              src="https://avatars.githubusercontent.com/u/204411665?v=4"
+              alt="Rhylogix profile"
+            />
+            <div class="hero-text">
+              <p class="eyebrow">hello, i'm</p>
+              <h1>rylogix</h1>
+              <p class="tagline">
+                Welcome to my portfolio. There&rsquo;s not much here, so don&rsquo;t
+                get overwhelmed.
+              </p>
+              <div class="hero-actions">
+                <button class="btn btn-ghost" id="share-page" type="button">
+                  Share
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="links" id="links">
+        <div class="container">
+          <div class="section-title">
+            <h2>Links</h2>
+            <span class="underline"></span>
+          </div>
+          <div id="links-grid" class="links-grid" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <section class="about" id="about">
+        <div class="container">
+          <div class="section-title">
+            <h2>About</h2>
+            <span class="underline"></span>
+          </div>
+          <div class="about-card">
+            <p>
+              I am a 17 year old BUM with a job and a laptop, trying to learn how to
+              code while also making Minecraft content creation. I do a lot of stuff,
+              and that&rsquo;s about it.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="projects" id="projects">
+        <div class="container">
+          <div class="section-title">
+            <h2>Projects</h2>
+            <span class="underline"></span>
+          </div>
+          <div class="project-grid">
+            <a
+              class="project-card"
+              href="https://github.com/Rylogix/Youtube-Optimizer"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <h3>YouTube Optimizer</h3>
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container"></div>
+    </footer>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <script src="js/main.js"></script>
+  </body>
+</html>
