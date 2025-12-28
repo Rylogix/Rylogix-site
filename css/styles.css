@@ -252,7 +252,8 @@ button {
 
 .links,
 .about,
-.projects {
+.projects,
+.learning {
   padding: 36px 0;
 }
 
@@ -426,6 +427,44 @@ button {
   transform: translateY(-6px);
   box-shadow: 0 16px 30px rgba(5, 5, 8, 0.6),
     0 0 22px rgba(245, 169, 39, 0.35);
+}
+
+.learning-note {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 18px;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.learning-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--accent);
+  box-shadow: 0 0 10px rgba(245, 169, 39, 0.45);
+  flex: 0 0 auto;
+}
+
+.learning-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.learning-card {
+  background: linear-gradient(145deg, var(--panel), var(--panel2));
+  border-radius: 18px;
+  border: 2px solid var(--border);
+  padding: 16px 18px;
+  box-shadow: var(--shadow), 0 0 0 1px rgba(245, 169, 39, 0.08);
+}
+
+.learning-card h3 {
+  margin: 0;
+  font-family: "Fredoka", sans-serif;
+  font-size: 1.05rem;
 }
 
 .site-footer {
