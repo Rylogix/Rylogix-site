@@ -57,11 +57,25 @@
       <section class="hero" id="top">
         <div class="container hero-inner">
           <div class="hero-card">
-            <img
-              class="avatar"
-              src="https://avatars.githubusercontent.com/u/204411665?v=4"
-              alt="Rhylogix profile"
-            />
+            <div class="discord-card" id="discord-card" data-status="offline">
+              <div class="discord-avatar-wrap">
+                <img
+                  class="discord-avatar"
+                  id="discord-avatar"
+                  src="https://cdn.discordapp.com/embed/avatars/0.png"
+                  alt="Discord profile avatar"
+                />
+                <span class="discord-status-dot" aria-hidden="true"></span>
+              </div>
+              <div class="discord-presence">
+                <p class="discord-status" id="discord-status">
+                  Status: loading...
+                </p>
+                <p class="discord-activity" id="discord-activity">
+                  Not playing anything right now.
+                </p>
+              </div>
+            </div>
             <div class="hero-text">
               <p class="eyebrow">hello, i'm</p>
               <h1>rylogix</h1>

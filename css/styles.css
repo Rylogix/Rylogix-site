@@ -168,6 +168,86 @@ button {
   box-shadow: 0 12px 24px rgba(7, 7, 10, 0.55);
 }
 
+.discord-card {
+  width: min(520px, 100%);
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 14px 18px;
+  background: linear-gradient(145deg, var(--panel), var(--panel2));
+  border-radius: 20px;
+  border: 2px solid var(--border);
+  box-shadow: var(--shadow), 0 0 0 1px rgba(245, 169, 39, 0.08);
+  text-align: left;
+}
+
+.discord-avatar-wrap {
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.discord-avatar {
+  width: 108px;
+  height: 108px;
+  border-radius: 50%;
+  border: 3px solid #1a1a24;
+  object-fit: cover;
+  box-shadow: 0 12px 24px rgba(7, 7, 10, 0.55);
+}
+
+.discord-status-dot {
+  position: absolute;
+  right: 6px;
+  bottom: 6px;
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  border: 2px solid #121219;
+  background: #76808f;
+  box-shadow: 0 0 8px rgba(118, 128, 143, 0.55);
+}
+
+.discord-card[data-status="online"] .discord-status-dot {
+  background: #3ba55d;
+  box-shadow: 0 0 10px rgba(59, 165, 93, 0.7);
+}
+
+.discord-card[data-status="idle"] .discord-status-dot {
+  background: #f0b232;
+  box-shadow: 0 0 10px rgba(240, 178, 50, 0.7);
+}
+
+.discord-card[data-status="dnd"] .discord-status-dot {
+  background: #ed4245;
+  box-shadow: 0 0 10px rgba(237, 66, 69, 0.7);
+}
+
+.discord-card[data-status="offline"] .discord-status-dot,
+.discord-card[data-status="unknown"] .discord-status-dot {
+  background: #76808f;
+  box-shadow: 0 0 8px rgba(118, 128, 143, 0.55);
+}
+
+.discord-presence {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+.discord-status,
+.discord-activity {
+  margin: 0;
+}
+
+.discord-status {
+  font-weight: 600;
+}
+
+.discord-activity {
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
 .hero-text h1 {
   font-family: "Fredoka", sans-serif;
   font-size: 2.4rem;

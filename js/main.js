@@ -41,6 +41,27 @@ const links = [
 const toast = document.getElementById("toast");
 const linksGrid = document.getElementById("links-grid");
 const shareButton = document.getElementById("share-page");
+const discordCard = document.getElementById("discord-card");
+const discordAvatar = document.getElementById("discord-avatar");
+const discordStatus = document.getElementById("discord-status");
+const discordActivity = document.getElementById("discord-activity");
+
+const DISCORD_USER_ID = "1068673520495775745";
+const DISCORD_API_URL = `https://api.lanyard.rest/v1/users/${DISCORD_USER_ID}`;
+const DISCORD_AVATAR_KEY = `discord-avatar-${DISCORD_USER_ID}`;
+const DISCORD_STATUS_LABELS = {
+  online: "Online",
+  idle: "Idle",
+  dnd: "Do Not Disturb",
+  offline: "Offline",
+};
+const DISCORD_ACTIVITY_LABELS = {
+  0: "Playing",
+  1: "Streaming",
+  2: "Listening to",
+  3: "Watching",
+  5: "Competing in",
+};
 
 const fallbackSvg = `
   <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -75,6 +96,142 @@ const showToast = (message) => {
   showToast.timeoutId = window.setTimeout(() => {
     toast.classList.remove("show");
   }, 1800);
+};
+
+const getCachedDiscordAvatar = () => {
+  try {
+    return window.localStorage.getItem(DISCORD_AVATAR_KEY);
+  } catch (error) {
+    return null;
+  }
+};
+
+const setCachedDiscordAvatar = (url) => {
+  if (!url) {
+    return;
+  }
+  try {
+    window.localStorage.setItem(DISCORD_AVATAR_KEY, url);
+  } catch (error) {
+    // Ignore storage errors to avoid breaking the UI.
+  }
+};
+
+const getDiscordAvatarUrl = (user) => {
+  if (!user) {
+    return null;
+  }
+
+  if (user.avatar) {
+    return `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=256`;
+  }
+
+  if (user.discriminator) {
+    const index = Number(user.discriminator) % 5;
+    return `https://cdn.discordapp.com/embed/avatars/${index}.png`;
+  }
+
+  return "https://cdn.discordapp.com/embed/avatars/0.png";
+};
+
+const getPrimaryDiscordActivity = (activities) => {
+  if (!Array.isArray(activities)) {
+    return null;
+  }
+
+  return (
+    activities.find(
+      (activity) =>
+        activity &&
+        activity.name &&
+        activity.type !== 4 &&
+        activity.name !== "Custom Status"
+    ) || null
+  );
+};
+
+const formatDiscordActivity = (activity) => {
+  if (!activity || !activity.name) {
+    return "Not playing anything right now.";
+  }
+
+  const label =
+    DISCORD_ACTIVITY_LABELS[activity.type] ||
+    DISCORD_ACTIVITY_LABELS[0];
+
+  return `${label} ${activity.name}`;
+};
+
+const setDiscordStatus = (status) => {
+  if (discordCard) {
+    discordCard.dataset.status = status;
+  }
+
+  if (discordStatus) {
+    const label = DISCORD_STATUS_LABELS[status] || "Offline";
+    discordStatus.textContent = `Status: ${label}`;
+  }
+};
+
+const setDiscordActivity = (text) => {
+  if (discordActivity) {
+    discordActivity.textContent = text;
+  }
+};
+
+const setDiscordAvatar = (url) => {
+  if (!discordAvatar || !url) {
+    return;
+  }
+
+  if (discordAvatar.src !== url) {
+    discordAvatar.src = url;
+  }
+  setCachedDiscordAvatar(url);
+};
+
+const setDiscordErrorState = () => {
+  if (discordStatus) {
+    discordStatus.textContent = "Discord status unavailable";
+  }
+  if (discordCard) {
+    discordCard.dataset.status = "unknown";
+  }
+  if (discordActivity) {
+    discordActivity.textContent = "Not playing anything right now.";
+  }
+};
+
+const updateDiscordPresence = async () => {
+  if (!discordCard) {
+    return;
+  }
+
+  try {
+    const response = await fetch(DISCORD_API_URL, { cache: "no-store" });
+    if (!response.ok) {
+      throw new Error("Bad response");
+    }
+
+    const payload = await response.json();
+    if (!payload || !payload.data) {
+      throw new Error("Missing data");
+    }
+
+    const data = payload.data;
+    const status = data.discord_status || "offline";
+    const activity = getPrimaryDiscordActivity(data.activities);
+
+    setDiscordStatus(status);
+    setDiscordActivity(formatDiscordActivity(activity));
+
+    const avatarUrl = getDiscordAvatarUrl(data.discord_user);
+    if (avatarUrl) {
+      setDiscordAvatar(avatarUrl);
+    }
+  } catch (error) {
+    setDiscordErrorState();
+  }
 };
 
 const copyText = async (text) => {
@@ -210,4 +367,14 @@ renderLinks();
 
 if (shareButton) {
   shareButton.addEventListener("click", handleShare);
+}
+
+if (discordCard) {
+  const cachedAvatar = getCachedDiscordAvatar();
+  if (cachedAvatar) {
+    setDiscordAvatar(cachedAvatar);
+  }
+
+  updateDiscordPresence();
+  window.setInterval(updateDiscordPresence, 30000);
 }
