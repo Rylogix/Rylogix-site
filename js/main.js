@@ -16,7 +16,7 @@ const links = [
     name: "GitHub",
     url: "https://github.com/rylogix",
     logo: "https://cdn.simpleicons.org/github",
-    cta: "Open-source builds",
+    cta: "All my coding projects are stored here",
   },
   {
     name: "Steam",
