@@ -146,12 +146,60 @@ const getFocusableElements = () => {
   );
 };
 
+const setScrollbarCompensation = () => {
+  const scrollBarWidth =
+    window.innerWidth - document.documentElement.clientWidth;
+  document.body.style.setProperty(
+    "--scrollbar-comp",
+    `${Math.max(scrollBarWidth, 0)}px`
+  );
+};
+
+const resetScrollbarCompensation = () => {
+  document.body.style.removeProperty("--scrollbar-comp");
+};
+
+const setContactModalOrigin = () => {
+  if (!contactModal) {
+    return;
+  }
+
+  const modalInner = contactModal.querySelector(".contact-modal-inner");
+  if (!modalInner || !contactButton) {
+    contactModal.style.setProperty("--contact-origin-x", "0px");
+    contactModal.style.setProperty("--contact-origin-y", "0px");
+    return;
+  }
+
+  const buttonRect = contactButton.getBoundingClientRect();
+  const modalRect = modalInner.getBoundingClientRect();
+
+  if (buttonRect.width === 0 && buttonRect.height === 0) {
+    contactModal.style.setProperty("--contact-origin-x", "0px");
+    contactModal.style.setProperty("--contact-origin-y", "0px");
+    return;
+  }
+
+  const buttonCenterX = buttonRect.left + buttonRect.width / 2;
+  const buttonCenterY = buttonRect.top + buttonRect.height / 2;
+  const modalCenterX = modalRect.left + modalRect.width / 2;
+  const modalCenterY = modalRect.top + modalRect.height / 2;
+
+  const deltaX = Math.round(buttonCenterX - modalCenterX);
+  const deltaY = Math.round(buttonCenterY - modalCenterY);
+
+  contactModal.style.setProperty("--contact-origin-x", `${deltaX}px`);
+  contactModal.style.setProperty("--contact-origin-y", `${deltaY}px`);
+};
+
 const openContactModal = () => {
   if (!contactModal || !contactBackdrop) {
     return;
   }
 
   lastFocusedElement = document.activeElement;
+  setContactModalOrigin();
+  setScrollbarCompensation();
   contactModal.classList.add("open");
   contactBackdrop.classList.add("open");
   document.body.classList.add("modal-open");
@@ -176,6 +224,7 @@ const closeContactModal = () => {
   contactModal.classList.remove("open");
   contactBackdrop.classList.remove("open");
   document.body.classList.remove("modal-open");
+  resetScrollbarCompensation();
   contactModal.setAttribute("aria-hidden", "true");
 
   if (lastFocusedElement && typeof lastFocusedElement.focus === "function") {

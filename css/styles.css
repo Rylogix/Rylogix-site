@@ -703,6 +703,8 @@ button {
 }
 
 .contact-modal {
+  --contact-origin-x: 0px;
+  --contact-origin-y: 0px;
   position: fixed;
   inset: 0;
   display: flex;
@@ -712,7 +714,7 @@ button {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transition: opacity 0.2s ease, visibility 0.2s ease;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
   z-index: 50;
 }
 
@@ -730,6 +732,17 @@ button {
   box-shadow: 0 20px 40px rgba(8, 8, 12, 0.35);
   padding: 24px;
   position: relative;
+  transform: translate(var(--contact-origin-x), var(--contact-origin-y)) scale(0.2);
+  opacity: 0;
+  transform-origin: center;
+  transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.2s ease;
+  will-change: transform, opacity;
+}
+
+.contact-modal.open .contact-modal-inner {
+  transform: translate(0, 0) scale(1);
+  opacity: 1;
 }
 
 .contact-modal h2 {
@@ -824,6 +837,7 @@ button {
 
 body.modal-open {
   overflow: hidden;
+  padding-right: var(--scrollbar-comp, 0px);
 }
 
 .site-footer {
@@ -926,5 +940,15 @@ button:focus-visible {
   .tech-list a:hover {
     transform: none;
     box-shadow: none;
+  }
+
+  .contact-modal {
+    transition: none;
+  }
+
+  .contact-modal-inner {
+    transition: none;
+    transform: none;
+    opacity: 1;
   }
 }
