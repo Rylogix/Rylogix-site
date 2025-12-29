@@ -152,7 +152,7 @@ const getPrimaryDiscordActivity = (activities) => {
 
 const formatDiscordActivity = (activity) => {
   if (!activity || !activity.name) {
-    return "Not playing anything right now.";
+    return "Doing nothing.";
   }
 
   const label =
@@ -191,14 +191,11 @@ const setDiscordAvatar = (url) => {
 };
 
 const setDiscordErrorState = () => {
-  if (discordStatus) {
-    discordStatus.textContent = "Discord status unavailable";
-  }
   if (discordCard) {
     discordCard.dataset.status = "unknown";
   }
   if (discordActivity) {
-    discordActivity.textContent = "Not playing anything right now.";
+    discordActivity.textContent = "Discord status unavailable";
   }
 };
 
