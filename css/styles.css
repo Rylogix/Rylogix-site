@@ -371,7 +371,8 @@ button {
 .links,
 .projects,
 .learning,
-.tech {
+.tech,
+.contact {
   padding: 36px 0;
 }
 
@@ -616,6 +617,53 @@ button {
 .tech-list a:hover {
   color: var(--accent);
   border-bottom-color: rgba(245, 169, 39, 0.6);
+}
+
+.contact-form {
+  display: grid;
+  gap: 16px;
+  max-width: 520px;
+}
+
+.contact-field {
+  display: grid;
+  gap: 8px;
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+
+.contact-field span {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.contact-field input,
+.contact-field textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #1c1c24;
+  color: var(--text);
+  font-family: "Inter", "Nunito", sans-serif;
+  font-size: 0.95rem;
+}
+
+.contact-field textarea {
+  resize: vertical;
+  min-height: 140px;
+}
+
+.contact-field input:focus,
+.contact-field textarea:focus {
+  outline: none;
+  border-color: rgba(245, 169, 39, 0.45);
+  box-shadow: 0 0 0 2px rgba(245, 169, 39, 0.15);
+}
+
+.contact-submit {
+  width: fit-content;
+  padding-inline: 22px;
 }
 
 .site-footer {
