@@ -78,12 +78,17 @@
                 src="https://cdn.discordapp.com/embed/avatars/0.png"
                 alt="Discord profile avatar"
               />
-              <span class="status-dot" aria-hidden="true"></span>
+              <span class="presence-badge" id="presence-badge" aria-hidden="true">
+                <span class="presence-icon" id="presence-icon"></span>
+                <span class="presence-dot" id="presence-dot"></span>
+              </span>
             </div>
             <div class="discord-text">
-              <p class="discord-activity" id="discord-activity">
-                Doing nothing.
-              </p>
+              <div class="discord-header">
+                <p class="discord-activity" id="discord-activity">
+                  Doing nothing.
+                </p>
+              </div>
             </div>
           </div>
           <div class="hero-card" data-reveal>
