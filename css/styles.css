@@ -371,8 +371,7 @@ button {
 .links,
 .projects,
 .learning,
-.tech,
-.contact {
+.tech {
   padding: 36px 0;
 }
 
@@ -619,26 +618,93 @@ button {
   border-bottom-color: rgba(245, 169, 39, 0.6);
 }
 
-.contact-form {
-  display: grid;
-  gap: 16px;
-  max-width: 520px;
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(8, 8, 12, 0.6);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+  z-index: 40;
 }
 
-.contact-field {
+.modal-backdrop.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.contact-modal {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+  z-index: 50;
+}
+
+.contact-modal.open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.contact-modal-inner {
+  width: min(520px, 94vw);
+  background: linear-gradient(145deg, var(--panel), var(--panel2));
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 20px 40px rgba(8, 8, 12, 0.35);
+  padding: 24px;
+  position: relative;
+}
+
+.contact-modal h2 {
+  margin: 0 0 16px;
+  font-family: "Fredoka", sans-serif;
+  text-shadow: none;
+}
+
+.modal-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #1c1c24;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.modal-close:hover {
+  background: #242330;
+}
+
+.contact-modal .contact-form {
+  display: grid;
+  gap: 16px;
+}
+
+.contact-modal .contact-field {
   display: grid;
   gap: 8px;
   font-size: 0.95rem;
   color: var(--muted);
 }
 
-.contact-field span {
+.contact-modal .contact-field span {
   font-weight: 600;
   color: var(--text);
 }
 
-.contact-field input,
-.contact-field textarea {
+.contact-modal .contact-field input,
+.contact-modal .contact-field textarea {
   width: 100%;
   padding: 12px 14px;
   border-radius: 12px;
@@ -649,21 +715,46 @@ button {
   font-size: 0.95rem;
 }
 
-.contact-field textarea {
+.contact-modal .contact-field textarea {
   resize: vertical;
   min-height: 140px;
 }
 
-.contact-field input:focus,
-.contact-field textarea:focus {
+.contact-modal .contact-field input:focus,
+.contact-modal .contact-field textarea:focus {
   outline: none;
   border-color: rgba(245, 169, 39, 0.45);
   box-shadow: 0 0 0 2px rgba(245, 169, 39, 0.15);
 }
 
-.contact-submit {
+.contact-modal .contact-submit {
   width: fit-content;
   padding-inline: 22px;
+}
+
+.contact-modal .contact-note {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.contact-modal .contact-status {
+  margin: 0;
+  min-height: 1.2em;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.contact-modal .contact-status.success {
+  color: #8bd17c;
+}
+
+.contact-modal .contact-status.error {
+  color: #f08f8f;
+}
+
+body.modal-open {
+  overflow: hidden;
 }
 
 .site-footer {

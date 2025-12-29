@@ -40,7 +40,12 @@ const links = [
 
 const toast = document.getElementById("toast");
 const linksGrid = document.getElementById("links-grid");
-const shareButton = document.getElementById("share-page");
+const contactButton = document.getElementById("contact-button");
+const contactModal = document.getElementById("contact-modal");
+const contactBackdrop = document.getElementById("contact-backdrop");
+const contactClose = document.getElementById("contact-close");
+const contactForm = document.getElementById("contact-form");
+const contactStatus = document.getElementById("contact-status");
 const discordCard = document.getElementById("discord-card");
 const discordAvatar = document.getElementById("discord-avatar");
 const discordStatus = document.getElementById("discord-status");
@@ -96,6 +101,140 @@ const showToast = (message) => {
   showToast.timeoutId = window.setTimeout(() => {
     toast.classList.remove("show");
   }, 1800);
+};
+
+const focusableSelector =
+  'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+let lastFocusedElement = null;
+
+const getFocusableElements = () => {
+  if (!contactModal) {
+    return [];
+  }
+
+  return Array.from(contactModal.querySelectorAll(focusableSelector)).filter(
+    (element) => !element.hasAttribute("disabled")
+  );
+};
+
+const openContactModal = () => {
+  if (!contactModal || !contactBackdrop) {
+    return;
+  }
+
+  lastFocusedElement = document.activeElement;
+  contactModal.classList.add("open");
+  contactBackdrop.classList.add("open");
+  document.body.classList.add("modal-open");
+  contactModal.setAttribute("aria-hidden", "false");
+
+  if (contactStatus) {
+    contactStatus.textContent = "";
+    contactStatus.classList.remove("success", "error");
+  }
+
+  const focusable = getFocusableElements();
+  if (focusable.length > 0) {
+    focusable[0].focus();
+  }
+};
+
+const closeContactModal = () => {
+  if (!contactModal || !contactBackdrop) {
+    return;
+  }
+
+  contactModal.classList.remove("open");
+  contactBackdrop.classList.remove("open");
+  document.body.classList.remove("modal-open");
+  contactModal.setAttribute("aria-hidden", "true");
+
+  if (lastFocusedElement && typeof lastFocusedElement.focus === "function") {
+    lastFocusedElement.focus();
+  }
+};
+
+const handleContactKeydown = (event) => {
+  if (!contactModal || !contactModal.classList.contains("open")) {
+    return;
+  }
+
+  if (event.key === "Escape") {
+    event.preventDefault();
+    closeContactModal();
+    return;
+  }
+
+  if (event.key !== "Tab") {
+    return;
+  }
+
+  const focusable = getFocusableElements();
+  if (focusable.length === 0) {
+    return;
+  }
+
+  const first = focusable[0];
+  const last = focusable[focusable.length - 1];
+
+  if (event.shiftKey && document.activeElement === first) {
+    event.preventDefault();
+    last.focus();
+  } else if (!event.shiftKey && document.activeElement === last) {
+    event.preventDefault();
+    first.focus();
+  }
+};
+
+const handleContactSubmit = async (event) => {
+  event.preventDefault();
+  if (!contactForm) {
+    return;
+  }
+
+  const submitButton = contactForm.querySelector('button[type="submit"]');
+  if (submitButton) {
+    submitButton.disabled = true;
+    submitButton.setAttribute("aria-busy", "true");
+  }
+
+  if (contactStatus) {
+    contactStatus.textContent = "Sending...";
+    contactStatus.classList.remove("success", "error");
+  }
+
+  try {
+    const response = await fetch(contactForm.action, {
+      method: "POST",
+      body: new FormData(contactForm),
+      headers: {
+        Accept: "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Formspree error");
+    }
+
+    if (contactStatus) {
+      contactStatus.textContent = "Message sent.";
+      contactStatus.classList.add("success");
+      contactStatus.classList.remove("error");
+    }
+
+    contactForm.reset();
+  } catch (error) {
+    if (contactStatus) {
+      contactStatus.textContent = "Something went wrong. Please try again.";
+      contactStatus.classList.add("error");
+      contactStatus.classList.remove("success");
+    }
+  } finally {
+    if (submitButton) {
+      submitButton.disabled = false;
+      submitButton.removeAttribute("aria-busy");
+    }
+  }
 };
 
 const getCachedDiscordAvatar = () => {
@@ -362,9 +501,23 @@ const handleShare = async () => {
 
 renderLinks();
 
-if (shareButton) {
-  shareButton.addEventListener("click", handleShare);
+if (contactButton) {
+  contactButton.addEventListener("click", openContactModal);
 }
+
+if (contactClose) {
+  contactClose.addEventListener("click", closeContactModal);
+}
+
+if (contactBackdrop) {
+  contactBackdrop.addEventListener("click", closeContactModal);
+}
+
+if (contactForm) {
+  contactForm.addEventListener("submit", handleContactSubmit);
+}
+
+document.addEventListener("keydown", handleContactKeydown);
 
 if (discordCard) {
   const cachedAvatar = getCachedDiscordAvatar();
