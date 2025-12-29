@@ -447,6 +447,7 @@ const renderLinks = () => {
   links.forEach((link) => {
     const card = document.createElement("a");
     card.className = "link-card";
+    card.setAttribute("data-reveal", "");
     card.href = link.url;
     card.target = "_blank";
     card.rel = "noopener noreferrer";
@@ -499,7 +500,60 @@ const handleShare = async () => {
   showToast(copied ? "Page link copied" : "Unable to copy");
 };
 
+const setupScrollReveal = () => {
+  const revealElements = Array.from(
+    document.querySelectorAll("[data-reveal]")
+  );
+
+  if (revealElements.length === 0) {
+    return;
+  }
+
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  ).matches;
+
+  if (prefersReducedMotion) {
+    revealElements.forEach((element) => {
+      element.classList.add("is-visible");
+    });
+    return;
+  }
+
+  document.body.classList.add("reveal-ready");
+
+  const revealOrder = new Map(
+    revealElements.map((element, index) => [element, index])
+  );
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      const visibleEntries = entries.filter((entry) => entry.isIntersecting);
+      if (visibleEntries.length === 0) {
+        return;
+      }
+
+      visibleEntries.sort(
+        (a, b) => revealOrder.get(a.target) - revealOrder.get(b.target)
+      );
+
+      visibleEntries.forEach((entry, index) => {
+        entry.target.style.transitionDelay = `${Math.min(index * 80, 240)}ms`;
+        entry.target.classList.add("is-visible");
+        observer.unobserve(entry.target);
+      });
+    },
+    {
+      threshold: 0.12,
+      rootMargin: "0px 0px -10% 0px",
+    }
+  );
+
+  revealElements.forEach((element) => observer.observe(element));
+};
+
 renderLinks();
+setupScrollReveal();
 
 if (contactButton) {
   contactButton.addEventListener("click", openContactModal);

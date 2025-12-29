@@ -65,7 +65,7 @@
     <main>
       <section class="hero" id="top">
         <div class="container hero-inner">
-          <div class="hero-card">
+          <div class="hero-card" data-reveal>
             <div class="discord-card" id="discord-card" data-status="offline">
               <div class="avatar-wrap">
                 <img
@@ -101,7 +101,7 @@
 
       <section class="links" id="links">
         <div class="container">
-          <div class="section-title">
+          <div class="section-title" data-reveal>
             <h2>Links</h2>
             <span class="underline"></span>
           </div>
@@ -111,13 +111,14 @@
 
       <section class="projects" id="projects">
         <div class="container">
-          <div class="section-title">
+          <div class="section-title" data-reveal>
             <h2>Projects</h2>
             <span class="underline"></span>
           </div>
           <div class="project-grid">
             <a
               class="project-card"
+              data-reveal
               href="https://github.com/Rylogix/Youtube-Optimizer"
               target="_blank"
               rel="noopener noreferrer"
@@ -137,25 +138,29 @@
 
       <section class="learning" id="learning">
         <div class="container">
-          <div class="section-title">
+          <div class="section-title" data-reveal>
             <h2>What I'm Learning</h2>
             <span class="underline"></span>
           </div>
-          <p class="learning-note">
+          <p class="learning-note" data-reveal>
             <span class="learning-dot" aria-hidden="true"></span>
             What im currently working on and learning,
           </p>
-          <div class="learning-grid" role="list">
-            <div class="learning-card" role="listitem">
+          <div class="learning-list" role="list">
+            <div class="learning-row" role="listitem" data-reveal>
+              <span class="learning-bullet" aria-hidden="true"></span>
               <h3>JavaScript fundamentals</h3>
             </div>
-            <div class="learning-card" role="listitem">
+            <div class="learning-row" role="listitem" data-reveal>
+              <span class="learning-bullet" aria-hidden="true"></span>
               <h3>Git &amp; GitHub workflows</h3>
             </div>
-            <div class="learning-card" role="listitem">
+            <div class="learning-row" role="listitem" data-reveal>
+              <span class="learning-bullet" aria-hidden="true"></span>
               <h3>Web performance and basic SEO</h3>
             </div>
-            <div class="learning-card" role="listitem">
+            <div class="learning-row" role="listitem" data-reveal>
+              <span class="learning-bullet" aria-hidden="true"></span>
               <h3>Python scripting</h3>
             </div>
           </div>
@@ -164,16 +169,16 @@
 
       <section class="tech" id="tech">
         <div class="container">
-          <div class="section-title">
+          <div class="section-title" data-reveal>
             <h2>Tech</h2>
             <span class="underline"></span>
           </div>
           <ul class="tech-list" role="list">
-            <li>
+            <li data-reveal>
               <span class="tech-label">PC:</span>
               Gaming laptop, Ryzen 5 6000 CPU and AMD RADEON GRAPHICS
             </li>
-            <li>
+            <li data-reveal>
               <span class="tech-label">Keyboard:</span>
               <a
                 href="https://steelseries.com/gaming-keyboards/apex-3"
@@ -181,7 +186,7 @@
                 rel="noopener noreferrer"
               >SteelSeries Apex 3</a>
             </li>
-            <li>
+            <li data-reveal>
               <span class="tech-label">Mouse:</span>
               <a
                 href="https://www.logitechg.com/en-us/shop/p/g305-lightspeed-wireless-gaming-mouse"
@@ -189,7 +194,7 @@
                 rel="noopener noreferrer"
               >Logitech G305</a>
             </li>
-            <li>
+            <li data-reveal>
               <span class="tech-label">Mic:</span>
               <a
                 href="https://www.maono.com/products/maono-pd300x-usb-and-xlr-dynamic-microphone"
@@ -197,7 +202,7 @@
                 rel="noopener noreferrer"
               >PD300X</a>
             </li>
-            <li>
+            <li data-reveal>
               <span class="tech-label">Headphones:</span>
               <a
                 href="https://hyperx.com/products/hyperx-cloud-alpha"
