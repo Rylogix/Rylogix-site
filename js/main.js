@@ -4,13 +4,13 @@ const links = [
     name: "YouTube",
     url: "https://www.youtube.com/@rylogix",
     logo: "https://cdn.simpleicons.org/youtube",
-    cta: "Watch the latest uploads",
+    cta: "Mainly posting minecraft content",
   },
   {
     name: "TikTok",
     url: "https://www.tiktok.com/@rylogix",
     logo: "https://cdn.simpleicons.org/tiktok",
-    cta: "Quick clips and updates",
+    cta: "Here i post variety content",
   },
   {
     name: "GitHub",
@@ -22,7 +22,7 @@ const links = [
     name: "Steam",
     url: "https://steamcommunity.com/id/rylogix",
     logo: "https://cdn.simpleicons.org/steam",
-    cta: "Games and achievements",
+    cta: "See my games and friends",
   },
   {
     name: "Discord Server",
@@ -34,7 +34,7 @@ const links = [
     name: "Cash App",
     url: "https://cash.app/$RylanGetPaid",
     logo: "https://cdn.simpleicons.org/cashapp",
-    cta: "Support the grind",
+    cta: "Lowkey send me a dollar tho",
   },
 ];
 
