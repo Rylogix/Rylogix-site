@@ -219,6 +219,7 @@ button {
   position: relative;
   display: inline-block;
   flex: 0 0 auto;
+  overflow: visible;
 }
 
 .discord-avatar {
@@ -228,6 +229,8 @@ button {
   border: 3px solid #1a1a24;
   object-fit: cover;
   box-shadow: 0 12px 24px rgba(7, 7, 10, 0.55);
+  position: relative;
+  z-index: 1;
 }
 
 .status-dot {
@@ -240,6 +243,7 @@ button {
   border: 3px solid #1c1c24;
   background: #76808f;
   box-shadow: 0 0 8px rgba(118, 128, 143, 0.55);
+  z-index: 2;
 }
 
 .discord-card[data-status="online"] .status-dot {
