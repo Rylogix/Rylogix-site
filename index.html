@@ -43,7 +43,15 @@
     <header class="topbar">
       <div class="container topbar-inner">
         <div class="brand">
-          <span class="brand-name">Rylogix Portfolio</span>
+          <div class="visitor-card" role="status" aria-live="polite">
+            <img
+              class="visitor-icon"
+              src="https://raw.githubusercontent.com/twbs/icons/main/icons/eye.svg"
+              alt="Visitors"
+            />
+            <span class="visitor-label">Visitors</span>
+            <span class="visitor-count" id="visitor-count">0</span>
+          </div>
         </div>
         <nav class="topbar-nav">
           <a href="#links">Links</a>
@@ -181,5 +189,50 @@
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
     <script src="js/main.js"></script>
+    <script>
+      (function() {
+        const domain = encodeURIComponent(window.location.hostname);
+        const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        const page_path = window.location.pathname;
+        const page_title = document.title;
+        const referrer = document.referrer;
+        
+        let search_query = '';
+        if (referrer) {
+          try {
+            const url = new URL(referrer);
+            if (url.hostname.includes('google.com')) {
+              search_query = url.searchParams.get('q') || '';
+            } else if (url.hostname.includes('bing.com')) {
+              search_query = url.searchParams.get('q') || '';
+            } else if (url.hostname.includes('yahoo.com')) {
+              search_query = url.searchParams.get('p') || '';
+            } else if (url.hostname.includes('duckduckgo.com')) {
+              search_query = url.searchParams.get('q') || '';
+            }
+          } catch (e) {}
+        }
+
+        fetch('https://visitor.6developer.com/visit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            domain, 
+            timezone,
+            page_path,
+            page_title,
+            referrer,
+            search_query
+          })
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (document.getElementById('visitor-count')) {
+            document.getElementById('visitor-count').textContent = data.totalCount;
+          }
+        })
+        .catch(error => console.error('Error:', error));
+      })();
+    </script>
   </body>
 </html>

@@ -103,6 +103,40 @@ button {
   box-shadow: 0 0 10px rgba(245, 169, 39, 0.5);
 }
 
+.visitor-card {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 12px;
+  background: #1c1c24;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 16px rgba(8, 8, 12, 0.35);
+  font-family: "Fredoka", sans-serif;
+  font-size: 0.95rem;
+  text-shadow: none;
+}
+
+.visitor-icon {
+  width: 18px;
+  height: 18px;
+  display: block;
+  filter: brightness(0) saturate(100%) invert(78%) sepia(42%)
+    saturate(1163%) hue-rotate(347deg) brightness(102%) contrast(104%);
+}
+
+.visitor-label {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.7rem;
+  color: var(--muted);
+}
+
+.visitor-count {
+  font-weight: 600;
+  color: var(--text);
+}
+
 .topbar-nav {
   display: flex;
   gap: 18px;
