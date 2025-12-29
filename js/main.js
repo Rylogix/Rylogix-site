@@ -48,7 +48,6 @@ const contactForm = document.getElementById("contact-form");
 const contactStatus = document.getElementById("contact-status");
 const discordCard = document.getElementById("discord-card");
 const discordAvatar = document.getElementById("discord-avatar");
-const discordStatus = document.getElementById("discord-status");
 const discordActivity = document.getElementById("discord-activity");
 const discordText = document.querySelector(".discord-text");
 const presenceBadge = document.getElementById("presence-badge");
@@ -63,12 +62,6 @@ let activityElapsedState = null;
 const DISCORD_USER_ID = "1068673520495775745";
 const DISCORD_API_URL = `https://api.lanyard.rest/v1/users/${DISCORD_USER_ID}`;
 const DISCORD_AVATAR_KEY = `discord-avatar-${DISCORD_USER_ID}`;
-const DISCORD_STATUS_LABELS = {
-  online: "Online",
-  idle: "Idle",
-  dnd: "Do Not Disturb",
-  offline: "Offline",
-};
 const DISCORD_ACTIVITY_LABELS = {
   0: "Playing",
   1: "Streaming",
@@ -491,10 +484,6 @@ const setDiscordStatus = (status) => {
     discordCard.style.setProperty("--status-color", getStatusColor(status));
   }
 
-  if (discordStatus) {
-    const label = DISCORD_STATUS_LABELS[status] || "Offline";
-    discordStatus.textContent = `Status: ${label}`;
-  }
 };
 
 const setDiscordActivity = (text) => {
