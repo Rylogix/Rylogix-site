@@ -129,7 +129,7 @@ button {
   text-shadow: none;
 }
 
-.brand .visitor-card {
+.topbar .visitor-card {
   height: 36px;
 }
 
@@ -162,6 +162,7 @@ button {
 
 .topbar-nav {
   display: flex;
+  align-items: center;
   gap: 18px;
   font-size: 0.95rem;
   color: var(--muted);
@@ -930,10 +931,6 @@ button:focus-visible {
 }
 
 @media (max-width: 640px) {
-  .topbar-nav {
-    display: none;
-  }
-
   .hero-card {
     padding: 22px;
   }
