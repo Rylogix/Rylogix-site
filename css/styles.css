@@ -89,7 +89,10 @@ button {
 
 .brand {
   display: flex;
+  flex-direction: row;
   align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
   font-family: "Fredoka", sans-serif;
   font-size: 1.25rem;
 }
@@ -126,6 +129,10 @@ button {
   text-shadow: none;
 }
 
+.brand .visitor-card {
+  height: 36px;
+}
+
 .visitor-icon {
   width: 18px;
   height: 18px;
@@ -144,6 +151,13 @@ button {
 .visitor-count {
   font-weight: 600;
   color: var(--text);
+}
+
+.clock-time {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+  font-size: clamp(0.95rem, 2.4vw, 1.1rem);
+  white-space: nowrap;
 }
 
 .topbar-nav {
