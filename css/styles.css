@@ -245,6 +245,16 @@ button {
   box-shadow: var(--shadow), 0 0 0 1px rgba(245, 169, 39, 0.08);
   text-align: left;
   --status-color: #76808f;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  will-change: transform, box-shadow;
+}
+
+.discord-card:hover,
+.discord-card:focus-visible {
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 0 16px 30px rgba(5, 5, 8, 0.55),
+    0 0 18px rgba(245, 169, 39, 0.28);
 }
 
 .discord-card[data-status="online"] {
@@ -588,6 +598,11 @@ button {
 .reveal-ready :where([data-reveal]).is-visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+.reveal-ready .discord-card:hover,
+.reveal-ready .discord-card:focus-visible {
+  transform: translateY(-2px) scale(1.01);
 }
 
 .links,
