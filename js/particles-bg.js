@@ -24,6 +24,25 @@
     let dpr = 1;
     let animationId = null;
 
+    // INFLUENCE_RADIUS: how far the cursor attracts particles (in px).
+    const INFLUENCE_RADIUS = 170;
+    // ATTRACTION_STRENGTH: pull intensity toward the cursor (smaller = floatier).
+    const ATTRACTION_STRENGTH = 0.06;
+    // RETURN_DAMPING: how quickly particles drift back to base motion and the
+    // cursor influence fades when the pointer leaves.
+    const RETURN_DAMPING = 0.035;
+    // MAX_LINE_DISTANCE: maximum distance for connecting lines.
+    const MAX_LINE_DISTANCE = 140;
+    // LINE_OPACITY_BOOST_NEAR_MOUSE: extra line opacity near the cursor.
+    const LINE_OPACITY_BOOST_NEAR_MOUSE = 0.6;
+
+    const pointer = {
+      x: 0,
+      y: 0,
+      active: false,
+      strength: 0,
+    };
+
     const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
     const rand = (min, max) => Math.random() * (max - min) + min;
 
@@ -36,13 +55,18 @@
     const createParticle = () => {
       const speed = rand(0.15, 0.45);
       const angle = rand(0, Math.PI * 2);
+      const baseVx = Math.cos(angle) * speed;
+      const baseVy = Math.sin(angle) * speed;
       return {
         x: rand(0, width),
         y: rand(0, height),
-        vx: Math.cos(angle) * speed,
-        vy: Math.sin(angle) * speed,
+        vx: baseVx,
+        vy: baseVy,
+        baseVx,
+        baseVy,
         radius: rand(0.6, 1.6),
         opacity: rand(0.35, 0.8),
+        mouseFactor: 0,
       };
     };
 
@@ -75,7 +99,7 @@
       const linkDistance = clamp(
         Math.min(width, height) * 0.2,
         90,
-        140
+        MAX_LINE_DISTANCE
       );
       const maxDistSq = linkDistance * linkDistance;
 
@@ -101,7 +125,11 @@
           }
 
           const dist = Math.sqrt(distSq);
-          const alpha = (1 - dist / linkDistance) * 0.35;
+          const baseAlpha = (1 - dist / linkDistance) * 0.35;
+          const boost =
+            Math.max(particle.mouseFactor, other.mouseFactor) *
+            LINE_OPACITY_BOOST_NEAR_MOUSE;
+          const alpha = clamp(baseAlpha * (1 + boost), 0, 0.85);
           ctx.strokeStyle = `rgba(200, 200, 215, ${alpha})`;
           ctx.beginPath();
           ctx.moveTo(particle.x, particle.y);
@@ -113,9 +141,34 @@
 
     const step = () => {
       const margin = 20;
+      const targetStrength = pointer.active ? 1 : 0;
+      pointer.strength += (targetStrength - pointer.strength) * RETURN_DAMPING;
+      if (pointer.strength < 0.001) {
+        pointer.strength = 0;
+      }
+      const influenceRadiusSq = INFLUENCE_RADIUS * INFLUENCE_RADIUS;
 
       for (let i = 0; i < particles.length; i += 1) {
         const particle = particles[i];
+        particle.mouseFactor = 0;
+
+        if (pointer.strength > 0) {
+          const dx = pointer.x - particle.x;
+          const dy = pointer.y - particle.y;
+          const distSq = dx * dx + dy * dy;
+
+          if (distSq < influenceRadiusSq) {
+            const dist = Math.sqrt(distSq) || 1;
+            const falloff = 1 - dist / INFLUENCE_RADIUS;
+            const force = falloff * ATTRACTION_STRENGTH * pointer.strength;
+            particle.vx += (dx / dist) * force;
+            particle.vy += (dy / dist) * force;
+            particle.mouseFactor = falloff * pointer.strength;
+          }
+        }
+
+        particle.vx += (particle.baseVx - particle.vx) * RETURN_DAMPING;
+        particle.vy += (particle.baseVy - particle.vy) * RETURN_DAMPING;
         particle.x += particle.vx;
         particle.y += particle.vy;
 
@@ -152,6 +205,36 @@
 
     resize();
     window.addEventListener("resize", resize, { passive: true });
+    window.addEventListener(
+      "pointermove",
+      (event) => {
+        pointer.x = event.clientX;
+        pointer.y = event.clientY;
+        pointer.active = true;
+      },
+      { passive: true }
+    );
+    window.addEventListener(
+      "pointerdown",
+      (event) => {
+        pointer.x = event.clientX;
+        pointer.y = event.clientY;
+        pointer.active = true;
+      },
+      { passive: true }
+    );
+    window.addEventListener("pointerup", () => {
+      pointer.active = false;
+    });
+    window.addEventListener("pointercancel", () => {
+      pointer.active = false;
+    });
+    window.addEventListener("mouseleave", () => {
+      pointer.active = false;
+    });
+    window.addEventListener("blur", () => {
+      pointer.active = false;
+    });
 
     if (prefersReducedMotion.addEventListener) {
       prefersReducedMotion.addEventListener("change", start);

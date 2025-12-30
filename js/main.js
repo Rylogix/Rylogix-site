@@ -160,6 +160,56 @@ const resetScrollbarCompensation = () => {
   document.body.style.removeProperty("--scrollbar-comp");
 };
 
+const uiToggleKeys = new Set();
+let uiToggleArmed = false;
+
+const isEditableTarget = (target) => {
+  if (!(target instanceof Element)) {
+    return false;
+  }
+
+  if (target.isContentEditable) {
+    return true;
+  }
+
+  const tagName = target.tagName;
+  return tagName === "INPUT" || tagName === "TEXTAREA" || tagName === "SELECT";
+};
+
+const toggleUiVisibility = () => {
+  document.body.classList.toggle("ui-hidden");
+};
+
+const handleUiToggleKeydown = (event) => {
+  if (isEditableTarget(event.target)) {
+    return;
+  }
+
+  const key = event.key.toLowerCase();
+  if (key !== "d" && key !== "f") {
+    return;
+  }
+
+  uiToggleKeys.add(key);
+
+  if (!uiToggleArmed && uiToggleKeys.has("d") && uiToggleKeys.has("f")) {
+    toggleUiVisibility();
+    uiToggleArmed = true;
+  }
+};
+
+const handleUiToggleKeyup = (event) => {
+  const key = event.key.toLowerCase();
+  if (key !== "d" && key !== "f") {
+    return;
+  }
+
+  uiToggleKeys.delete(key);
+  if (!uiToggleKeys.has("d") || !uiToggleKeys.has("f")) {
+    uiToggleArmed = false;
+  }
+};
+
 const clockFormatter = new Intl.DateTimeFormat("en-US", {
   timeZone: "America/New_York",
   hour: "numeric",
@@ -1116,6 +1166,12 @@ if (contactForm) {
 }
 
 document.addEventListener("keydown", handleContactKeydown);
+document.addEventListener("keydown", handleUiToggleKeydown);
+document.addEventListener("keyup", handleUiToggleKeyup);
+window.addEventListener("blur", () => {
+  uiToggleKeys.clear();
+  uiToggleArmed = false;
+});
 
 if (discordCard) {
   const cachedAvatar = getCachedDiscordAvatar();
