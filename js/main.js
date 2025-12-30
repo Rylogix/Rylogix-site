@@ -1146,7 +1146,7 @@ const setupScrollReveal = () => {
 };
 
 renderLinks();
-setupScrollReveal();
+// Scroll reveal handled in js/effects.js.
 startClock();
 
 if (contactButton) {
