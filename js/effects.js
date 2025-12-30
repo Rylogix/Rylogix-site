@@ -18,7 +18,7 @@
     maxTilt: 6,
     maxLift: 4,
     maxScale: 1.01,
-    smoothing: 0.12,
+    smoothing: 0.3,
   };
 
   const REVEAL_SETTINGS = {
@@ -185,7 +185,7 @@
       state.targetX = (0.5 - normalizedY) * 2 * TILT_SETTINGS.maxTilt;
       state.targetLift = -TILT_SETTINGS.maxLift;
       state.targetScale = TILT_SETTINGS.maxScale;
-      state.targetGlow = 0.8;
+      state.targetGlow = 0.35;
       state.targetGlowX = normalizedX * 100;
       state.targetGlowY = normalizedY * 100;
 
