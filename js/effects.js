@@ -2,11 +2,11 @@
   // Tilt targets in priority order.
   const TILT_SELECTORS = [
     ".discord-card",
+    ".hero-card",
     ".card",
     ".panel",
     ".section-card",
     ".project-card",
-    ".project-tag",
   ];
   const TILT_FALLBACK_SELECTORS = [
     ".hero-card",

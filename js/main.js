@@ -1,6 +1,18 @@
 // Link data powers the cards.
 const links = [
   {
+    name: "Discord Server",
+    url: "https://discord.com/invite/u3rMwEKu9D",
+    logo: "https://cdn.simpleicons.org/discord",
+    cta: "Join the community",
+  },
+  {
+    name: "GitHub",
+    url: "https://github.com/rylogix",
+    logo: "https://cdn.simpleicons.org/github",
+    cta: "All my coding projects are stored here",
+  },
+  {
     name: "YouTube",
     url: "https://www.youtube.com/@rylogix",
     logo: "https://cdn.simpleicons.org/youtube",
@@ -13,22 +25,10 @@ const links = [
     cta: "Here i post variety content",
   },
   {
-    name: "GitHub",
-    url: "https://github.com/rylogix",
-    logo: "https://cdn.simpleicons.org/github",
-    cta: "All my coding projects are stored here",
-  },
-  {
     name: "Steam",
     url: "https://steamcommunity.com/id/rylogix",
     logo: "https://cdn.simpleicons.org/steam",
     cta: "See my games and friends",
-  },
-  {
-    name: "Discord Server",
-    url: "https://discord.com/invite/u3rMwEKu9D",
-    logo: "https://cdn.simpleicons.org/discord",
-    cta: "Join the community",
   },
   {
     name: "Cash App",
@@ -36,7 +36,28 @@ const links = [
     logo: "https://cdn.simpleicons.org/cashapp",
     cta: "Lowkey send me a dollar tho",
   },
+  {
+    name: "Twitch",
+    url: "https://www.twitch.tv/rylogix",
+    logo: "https://cdn.simpleicons.org/twitch",
+    cta: "Catch the streams here",
+  },
+  {
+    name: "Roblox",
+    url: "https://www.roblox.com/users/2718945057/profile",
+    logo: "https://cdn.simpleicons.org/roblox",
+    cta: "Find me on Roblox",
+  },
+  {
+    name: "Rec Room",
+    url: "https://rec.net/user/Rylogix",
+    logo: "https://cdn.simpleicons.org/recroom",
+    cta: "Hang out on Rec Room",
+  },
 ];
+
+const VISIBLE_LINK_COUNT = 8;
+let linksExpanded = false;
 
 const toast = document.getElementById("toast");
 const linksGrid = document.getElementById("links-grid");
@@ -1147,7 +1168,39 @@ const renderLinks = () => {
 
   linksGrid.innerHTML = "";
 
-  links.forEach((link) => {
+  const shouldCollapse =
+    !linksExpanded && links.length > VISIBLE_LINK_COUNT;
+
+  const createSeeMore = () => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "links-toggle";
+    button.textContent = "See more";
+    button.setAttribute("data-reveal", "");
+
+    button.addEventListener("click", () => {
+      if (button.classList.contains("is-exiting")) {
+        return;
+      }
+      linksExpanded = true;
+      linksGrid
+        .querySelectorAll(".link-card.is-collapsed")
+        .forEach((card) => card.classList.remove("is-collapsed"));
+      button.disabled = true;
+      button.classList.add("is-exiting");
+
+      const removeButton = () => {
+        button.remove();
+      };
+
+      button.addEventListener("transitionend", removeButton, { once: true });
+      window.setTimeout(removeButton, 320);
+    });
+
+    return button;
+  };
+
+  links.forEach((link, index) => {
     const card = document.createElement("a");
     card.className = "link-card";
     card.setAttribute("data-reveal", "");
@@ -1178,6 +1231,14 @@ const renderLinks = () => {
     card.appendChild(external);
 
     linksGrid.appendChild(card);
+
+    if (shouldCollapse && index === VISIBLE_LINK_COUNT - 1) {
+      linksGrid.appendChild(createSeeMore());
+    }
+
+    if (shouldCollapse && index >= VISIBLE_LINK_COUNT) {
+      card.classList.add("is-collapsed");
+    }
   });
 };
 
