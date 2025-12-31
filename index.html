@@ -42,14 +42,19 @@
     <header class="topbar">
       <div class="container topbar-inner">
         <nav class="brand" aria-label="Primary">
-          <a class="home-link" href="index.html" aria-label="Go to home">
+          <a
+            class="home-link"
+            id="home-link"
+            href="index.html"
+            aria-label="Go to home"
+          >
             <img
               class="home-logo"
               src="assets/images/rylogix-mark.png"
               alt="Rylogix logo"
             />
           </a>
-          <a class="topbar-link" href="projects.html">Projects</a>
+          <a class="topbar-link" id="projects-link" href="#projects">Projects</a>
         </nav>
         <div class="topbar-nav" aria-live="polite">
           <div class="visitor-card" role="status" aria-live="polite">
@@ -66,7 +71,7 @@
     </header>
 
     <main>
-      <section class="hero" id="top">
+      <section class="hero view-section" id="top" data-home-section>
         <div class="container hero-inner">
           <a
             class="discord-card glow-card"
@@ -115,7 +120,7 @@
         </div>
       </section>
 
-      <section class="links" id="links">
+      <section class="links view-section" id="links" data-home-section>
         <div class="container">
           <div class="section-title" data-reveal>
             <h2>Links</h2>
@@ -125,7 +130,77 @@
         </div>
       </section>
 
-      <section class="tech" id="tech">
+      <section
+        class="projects view-section"
+        id="projects"
+        hidden
+        aria-hidden="true"
+      >
+        <div class="container">
+          <div class="section-title" data-reveal>
+            <h2>Projects</h2>
+            <span class="underline"></span>
+          </div>
+          <div class="projects-grid">
+            <a
+              class="project-card glow-card"
+              href="https://github.com/Rylogix/Constellationscreen"
+              target="_blank"
+              rel="noopener noreferrer"
+              data-reveal
+              data-tilt-max="6"
+              data-tilt-lift="6"
+              data-tilt-scale="1.02"
+              data-tilt-glow="0.35"
+              data-tilt-hover-lift="6"
+              data-tilt-hover-scale="1.02"
+              data-tilt-hover-glow="0.25"
+              aria-label="Open Consetellation Screensaver repository"
+            >
+              <div class="project-media">
+                <img
+                  src="assets/images/projects/constellation-screensaver.png"
+                  alt="Consetellation Screensaver screenshot"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+              <div class="project-body">
+                <h3>Consetellation Screensaver</h3>
+                <p>A moving constellation screensaver with a configuration menu</p>
+                <div class="project-tags" aria-label="Project tags">
+                  <span
+                    class="project-tag"
+                    data-tilt-max="3"
+                    data-tilt-lift="2"
+                    data-tilt-scale="1.02"
+                    data-tilt-glow="0.2"
+                    data-tilt-hover-lift="2"
+                    data-tilt-hover-scale="1.02"
+                    data-tilt-hover-glow="0.15"
+                  >
+                    <span>CSS</span>
+                  </span>
+                  <span
+                    class="project-tag"
+                    data-tilt-max="3"
+                    data-tilt-lift="2"
+                    data-tilt-scale="1.02"
+                    data-tilt-glow="0.2"
+                    data-tilt-hover-lift="2"
+                    data-tilt-hover-scale="1.02"
+                    data-tilt-hover-glow="0.15"
+                  >
+                    <span>JS</span>
+                  </span>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section class="tech view-section" id="tech" data-home-section>
         <div class="container">
           <div class="section-title" data-reveal>
             <h2>Tech</h2>
@@ -174,7 +249,7 @@
 
     </main>
 
-    <footer class="site-footer">
+    <footer class="site-footer" data-home-section>
       <div class="container">&copy; Rylogix. All rights reserved.</div>
     </footer>
 

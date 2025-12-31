@@ -46,6 +46,17 @@ const contactBackdrop = document.getElementById("contact-backdrop");
 const contactClose = document.getElementById("contact-close");
 const contactForm = document.getElementById("contact-form");
 const contactStatus = document.getElementById("contact-status");
+const projectsLink = document.getElementById("projects-link");
+const homeLink = document.getElementById("home-link");
+const projectsSection = document.getElementById("projects");
+const homeSections = document.querySelectorAll("[data-home-section]");
+const prefersReducedMotion = window.matchMedia(
+  "(prefers-reduced-motion: reduce)"
+);
+const VIEW_TRANSITION_MS = 280;
+const VIEW_SWAP_DELAY = 400;
+let isProjectsView = false;
+let viewSwapTimeoutId = null;
 const discordCard = document.getElementById("discord-card");
 const discordAvatar = document.getElementById("discord-avatar");
 const discordActivity = document.getElementById("discord-activity");
@@ -241,6 +252,130 @@ const setContactModalOrigin = () => {
 
   contactModal.style.setProperty("--contact-origin-x", `${deltaX}px`);
   contactModal.style.setProperty("--contact-origin-y", `${deltaY}px`);
+};
+
+const showSection = (section) => {
+  if (
+    !section ||
+    (!section.hasAttribute("hidden") && !section.classList.contains("is-hidden"))
+  ) {
+    return;
+  }
+
+  section.classList.add("view-section");
+  section.removeAttribute("hidden");
+  section.setAttribute("aria-hidden", "false");
+  section.classList.add("is-hidden");
+
+  if (prefersReducedMotion.matches) {
+    section.classList.remove("is-hidden");
+    return;
+  }
+
+  window.requestAnimationFrame(() => {
+    window.requestAnimationFrame(() => {
+      section.classList.remove("is-hidden");
+    });
+  });
+};
+
+const hideSection = (section) => {
+  if (!section || section.hasAttribute("hidden")) {
+    return;
+  }
+
+  section.classList.add("view-section");
+  section.classList.add("is-hidden");
+  section.setAttribute("aria-hidden", "true");
+
+  if (prefersReducedMotion.matches) {
+    section.setAttribute("hidden", "");
+    return;
+  }
+
+  const finalize = (event) => {
+    if (event && event.target !== section) {
+      return;
+    }
+    section.setAttribute("hidden", "");
+    section.removeEventListener("transitionend", finalize);
+  };
+
+  section.addEventListener("transitionend", finalize);
+  window.setTimeout(() => {
+    if (!section.hasAttribute("hidden")) {
+      finalize();
+    }
+  }, VIEW_TRANSITION_MS + 60);
+};
+
+const setProjectsView = (enabled) => {
+  if (enabled === isProjectsView) {
+    return;
+  }
+  isProjectsView = enabled;
+  document.body.classList.toggle("show-projects", enabled);
+
+  if (viewSwapTimeoutId) {
+    window.clearTimeout(viewSwapTimeoutId);
+    viewSwapTimeoutId = null;
+  }
+
+  if (enabled) {
+    homeSections.forEach((section) => hideSection(section));
+    if (prefersReducedMotion.matches) {
+      showSection(projectsSection);
+    } else {
+      viewSwapTimeoutId = window.setTimeout(() => {
+        showSection(projectsSection);
+      }, VIEW_SWAP_DELAY);
+    }
+  } else {
+    hideSection(projectsSection);
+    if (prefersReducedMotion.matches) {
+      homeSections.forEach((section) => showSection(section));
+    } else {
+      viewSwapTimeoutId = window.setTimeout(() => {
+        homeSections.forEach((section) => showSection(section));
+      }, VIEW_SWAP_DELAY);
+    }
+  }
+};
+
+const shouldHandleNavClick = (event) => {
+  if (event.defaultPrevented) {
+    return false;
+  }
+  if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey) {
+    return false;
+  }
+  return true;
+};
+
+const handleProjectsNavClick = (event) => {
+  if (!projectsSection || !shouldHandleNavClick(event)) {
+    return;
+  }
+  event.preventDefault();
+  setProjectsView(true);
+  projectsSection.scrollIntoView({
+    behavior: prefersReducedMotion.matches ? "auto" : "smooth",
+    block: "start",
+  });
+  if (window.location.hash !== "#projects") {
+    window.history.pushState(null, "", "#projects");
+  }
+};
+
+const handleHomeNavClick = (event) => {
+  if (!projectsSection || !shouldHandleNavClick(event)) {
+    return;
+  }
+  event.preventDefault();
+  setProjectsView(false);
+  if (window.location.hash) {
+    window.history.pushState(null, "", window.location.pathname);
+  }
 };
 
 const openContactModal = () => {
@@ -1122,6 +1257,18 @@ const setupScrollReveal = () => {
 
 renderLinks();
 // Scroll reveal handled in js/effects.js.
+
+if (projectsLink && homeLink && projectsSection) {
+  setProjectsView(false);
+  if (window.location.hash) {
+    window.history.replaceState(null, "", window.location.pathname);
+  }
+  projectsLink.addEventListener("click", handleProjectsNavClick);
+  homeLink.addEventListener("click", handleHomeNavClick);
+  window.addEventListener("hashchange", () => {
+    setProjectsView(window.location.hash === "#projects");
+  });
+}
 
 if (contactButton) {
   contactButton.addEventListener("click", openContactModal);

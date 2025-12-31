@@ -18,6 +18,7 @@
 
 html {
   scroll-behavior: smooth;
+  scrollbar-gutter: stable;
 }
 
 body {
@@ -41,6 +42,7 @@ body {
       transparent 50%
     );
   min-height: 100vh;
+  overflow-y: scroll;
 }
 
 #bg-canvas {
@@ -95,7 +97,7 @@ button {
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 10px;
+  gap: 14px;
   flex-wrap: wrap;
   font-family: "Fredoka", sans-serif;
   font-size: 1.25rem;
@@ -120,8 +122,8 @@ button {
 }
 
 .home-logo {
-  width: 26px;
-  height: 26px;
+  width: 32px;
+  height: 32px;
   object-fit: contain;
 }
 
@@ -724,6 +726,20 @@ button {
   padding: 42px 0 54px;
 }
 
+.view-section {
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 0.28s ease, transform 0.28s ease;
+  transform-origin: center top;
+  will-change: transform, opacity;
+}
+
+.view-section.is-hidden {
+  opacity: 0;
+  transform: scale(0.98);
+  pointer-events: none;
+}
+
 .projects-grid {
   display: grid;
   gap: 22px;
@@ -1258,11 +1274,6 @@ button:focus-visible {
   }
 }
 
-@media (max-width: 900px) {
-  .projects-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
 
 @media (prefers-reduced-motion: reduce) {
   html {
@@ -1273,6 +1284,16 @@ button:focus-visible {
     transition: none;
     transform: none;
     opacity: 1;
+  }
+
+  .view-section {
+    transition: none;
+    transform: none;
+    will-change: auto;
+  }
+
+  .view-section.is-hidden {
+    transform: none;
   }
 
   .tilt-card {
