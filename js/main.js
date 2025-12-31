@@ -362,8 +362,8 @@ const handleProjectsNavClick = (event) => {
     behavior: prefersReducedMotion.matches ? "auto" : "smooth",
     block: "start",
   });
-  if (window.location.hash !== "#projects") {
-    window.history.pushState(null, "", "#projects");
+  if (window.location.hash) {
+    window.history.replaceState(null, "", window.location.pathname);
   }
 };
 
@@ -1265,9 +1265,6 @@ if (projectsLink && homeLink && projectsSection) {
   }
   projectsLink.addEventListener("click", handleProjectsNavClick);
   homeLink.addEventListener("click", handleHomeNavClick);
-  window.addEventListener("hashchange", () => {
-    setProjectsView(window.location.hash === "#projects");
-  });
 }
 
 if (contactButton) {
