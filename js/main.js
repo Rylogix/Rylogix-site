@@ -10,7 +10,7 @@ const links = [
     name: "GitHub",
     url: "https://github.com/rylogix",
     logo: "https://cdn.simpleicons.org/github",
-    cta: "All my coding projects are stored here",
+    cta: "All my projects are stored here",
   },
   {
     name: "YouTube",
@@ -40,7 +40,7 @@ const links = [
     name: "Twitch",
     url: "https://www.twitch.tv/rylogix",
     logo: "https://cdn.simpleicons.org/twitch",
-    cta: "Catch the streams here",
+    cta: "I stream occasionally",
   },
   {
     name: "Roblox",
@@ -52,7 +52,7 @@ const links = [
     name: "Rec Room",
     url: "https://rec.net/user/Rylogix",
     logo: "https://cdn.simpleicons.org/recroom",
-    cta: "Hang out on Rec Room",
+    cta: "My rec.net profile",
   },
 ];
 
