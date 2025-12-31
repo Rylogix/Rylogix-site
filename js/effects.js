@@ -65,20 +65,6 @@
     return Array.from(targets);
   };
 
-  // Apply the breathing glow class to card-like elements.
-  const applyBreathingGlow = () => {
-    const glowTargets = document.querySelectorAll(
-      ".discord-card, .hero-card, .link-card, .visitor-card, .contact-modal-inner"
-    );
-
-    glowTargets.forEach((element) => {
-      if (element.dataset.animate === "false") {
-        return;
-      }
-      element.classList.add("breathing-glow");
-    });
-  };
-
   // Cursor-aware tilt with rAF smoothing and a moving highlight.
   const initTilt = (element) => {
     if (element.dataset.tilt === "false") {
@@ -424,7 +410,6 @@
 
   const init = () => {
     resolveTiltTargets().forEach(initTilt);
-    applyBreathingGlow();
     initScrollReveal();
     initSmoothScroll();
     handleVisibility();
