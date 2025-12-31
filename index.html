@@ -41,7 +41,17 @@
     <canvas id="bg-canvas" aria-hidden="true"></canvas>
     <header class="topbar">
       <div class="container topbar-inner">
-        <div class="brand">
+        <nav class="brand" aria-label="Primary">
+          <a class="home-link" href="index.html" aria-label="Go to home">
+            <img
+              class="home-logo"
+              src="assets/images/rylogix-mark.png"
+              alt="Rylogix logo"
+            />
+          </a>
+          <a class="topbar-link" href="projects.html">Projects</a>
+        </nav>
+        <div class="topbar-nav" aria-live="polite">
           <div class="visitor-card" role="status" aria-live="polite">
             <img
               class="visitor-icon"
@@ -52,17 +62,6 @@
             <span class="visitor-count" id="visitor-count">0</span>
           </div>
         </div>
-        <div class="topbar-nav" aria-live="polite">
-          <div class="visitor-card" role="status" aria-live="polite">
-            <img
-              class="visitor-icon"
-              src="https://raw.githubusercontent.com/twbs/icons/main/icons/clock.svg"
-              alt="Clock"
-            />
-            <span class="visitor-label">My time</span>
-            <span class="visitor-count clock-time" id="clock-time">--:--:--</span>
-          </div>
-        </div>
       </div>
     </header>
 
@@ -70,7 +69,7 @@
       <section class="hero" id="top">
         <div class="container hero-inner">
           <a
-            class="discord-card"
+            class="discord-card glow-card"
             id="discord-card"
             data-status="offline"
             data-reveal

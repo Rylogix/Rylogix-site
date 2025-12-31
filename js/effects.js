@@ -5,6 +5,8 @@
     ".card",
     ".panel",
     ".section-card",
+    ".project-card",
+    ".project-tag",
   ];
   const TILT_FALLBACK_SELECTORS = [
     ".hero-card",
@@ -37,6 +39,13 @@
   const coarsePointer = window.matchMedia("(pointer: coarse)");
 
   const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+  const readNumber = (value) => {
+    if (value === undefined || value === null || value === "") {
+      return null;
+    }
+    const parsed = Number.parseFloat(value);
+    return Number.isFinite(parsed) ? parsed : null;
+  };
 
   // Resolve tilt targets with a fallback if none are found.
   const resolveTiltTargets = () => {
@@ -81,6 +90,15 @@
     }
 
     element.classList.add("tilt-card");
+
+    const maxTilt = readNumber(element.dataset.tiltMax) ?? TILT_SETTINGS.maxTilt;
+    const maxLift = readNumber(element.dataset.tiltLift) ?? TILT_SETTINGS.maxLift;
+    const maxScale =
+      readNumber(element.dataset.tiltScale) ?? TILT_SETTINGS.maxScale;
+    const maxGlow = readNumber(element.dataset.tiltGlow) ?? 0.35;
+    const hoverLift = readNumber(element.dataset.tiltHoverLift);
+    const hoverScale = readNumber(element.dataset.tiltHoverScale);
+    const hoverGlow = readNumber(element.dataset.tiltHoverGlow);
 
     const state = {
       rect: null,
@@ -181,11 +199,11 @@
       const normalizedX = clamp(relativeX, 0, 1);
       const normalizedY = clamp(relativeY, 0, 1);
 
-      state.targetY = (normalizedX - 0.5) * 2 * TILT_SETTINGS.maxTilt;
-      state.targetX = (0.5 - normalizedY) * 2 * TILT_SETTINGS.maxTilt;
-      state.targetLift = -TILT_SETTINGS.maxLift;
-      state.targetScale = TILT_SETTINGS.maxScale;
-      state.targetGlow = 0.35;
+      state.targetY = (normalizedX - 0.5) * 2 * maxTilt;
+      state.targetX = (0.5 - normalizedY) * 2 * maxTilt;
+      state.targetLift = -maxLift;
+      state.targetScale = maxScale;
+      state.targetGlow = maxGlow;
       state.targetGlowX = normalizedX * 100;
       state.targetGlowY = normalizedY * 100;
 
@@ -195,6 +213,25 @@
     const handlePointerEnter = () => {
       state.rect = element.getBoundingClientRect();
       setWillChange();
+
+      let needsUpdate = false;
+      if (hoverLift !== null) {
+        state.targetLift = -hoverLift;
+        needsUpdate = true;
+      }
+      if (hoverScale !== null) {
+        state.targetScale = hoverScale;
+        needsUpdate = true;
+      }
+      if (hoverGlow !== null) {
+        state.targetGlow = hoverGlow;
+        state.targetGlowX = 50;
+        state.targetGlowY = 50;
+        needsUpdate = true;
+      }
+      if (needsUpdate) {
+        scheduleUpdate();
+      }
     };
 
     const handlePointerLeave = () => {

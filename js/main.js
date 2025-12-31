@@ -53,7 +53,6 @@ const discordText = document.querySelector(".discord-text");
 const presenceBadge = document.getElementById("presence-badge");
 const presenceIcon = document.getElementById("presence-icon");
 const presenceDot = document.getElementById("presence-dot");
-const clockTime = document.getElementById("clock-time");
 
 let spotifyProgressTimer = null;
 let spotifyProgressState = null;
@@ -210,30 +209,6 @@ const handleUiToggleKeyup = (event) => {
   }
 };
 
-const clockFormatter = new Intl.DateTimeFormat("en-US", {
-  timeZone: "America/New_York",
-  hour: "numeric",
-  minute: "2-digit",
-  second: "2-digit",
-  hour12: true,
-});
-
-const updateClockTime = () => {
-  if (!clockTime) {
-    return;
-  }
-
-  clockTime.textContent = clockFormatter.format(new Date());
-};
-
-const startClock = () => {
-  if (!clockTime) {
-    return;
-  }
-
-  updateClockTime();
-  window.setInterval(updateClockTime, 1000);
-};
 
 const setContactModalOrigin = () => {
   if (!contactModal) {
@@ -1147,7 +1122,6 @@ const setupScrollReveal = () => {
 
 renderLinks();
 // Scroll reveal handled in js/effects.js.
-startClock();
 
 if (contactButton) {
   contactButton.addEventListener("click", openContactModal);
