@@ -909,31 +909,24 @@ button {
 
 .blog-tabs {
   scrollbar-width: none;
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent 0,
+    #000 24px,
+    #000 calc(100% - 24px),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    90deg,
+    transparent 0,
+    #000 24px,
+    #000 calc(100% - 24px),
+    transparent 100%
+  );
 }
 
 .blog-tabs::-webkit-scrollbar {
   display: none;
-}
-
-.blog-tabs-wrap::before,
-.blog-tabs-wrap::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 24px;
-  pointer-events: none;
-  z-index: 1;
-}
-
-.blog-tabs-wrap::before {
-  left: 32px;
-  background: linear-gradient(90deg, rgba(20, 20, 27, 0.95), transparent);
-}
-
-.blog-tabs-wrap::after {
-  right: 32px;
-  background: linear-gradient(270deg, rgba(20, 20, 27, 0.95), transparent);
 }
 
 .blog-tab {
