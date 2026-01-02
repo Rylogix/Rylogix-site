@@ -118,7 +118,7 @@
   // URL state: keep the selected blog in the query so links are shareable.
   const updateUrlState = (id, { replace } = {}) => {
     const url = new URL(window.location.href);
-    url.searchParams.set("blog", id);
+    url.search = "";
     url.hash = "";
     if (replace) {
       window.history.replaceState({ blog: id }, "", url);
@@ -253,11 +253,8 @@
     renderNavigator();
 
     const initialId = getBlogIdFromUrl() || entries[0].id;
-    const hadUrlState = Boolean(getBlogIdFromUrl());
     setActiveBlog(initialId, { pushState: false, animate: false });
-    if (!hadUrlState) {
-      updateUrlState(initialId, { replace: true });
-    }
+    updateUrlState(initialId, { replace: true });
 
     blogSelect.addEventListener("change", (event) => {
       const target = event.target;
@@ -280,8 +277,9 @@
       blogTabsRight.addEventListener("click", () => scrollTabsBy(1));
     }
 
-    window.addEventListener("popstate", () => {
-      const id = getBlogIdFromUrl() || entries[0].id;
+    window.addEventListener("popstate", (event) => {
+      const stateId = event.state && event.state.blog;
+      const id = stateId || getBlogIdFromUrl() || entries[0].id;
       setActiveBlog(id, { pushState: false });
     });
 
