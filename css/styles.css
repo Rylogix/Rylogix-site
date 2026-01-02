@@ -41,6 +41,8 @@ body {
       rgba(255, 255, 255, 0.06),
       transparent 50%
     );
+  background-attachment: fixed;
+  background-repeat: no-repeat;
   min-height: 100vh;
   overflow-y: scroll;
 }
@@ -839,6 +841,171 @@ button {
   opacity: 0.6;
 }
 
+.blogs {
+  padding: 42px 0 54px;
+}
+
+.blog-shell {
+  display: grid;
+  gap: 20px;
+  padding: 24px;
+  border-radius: 24px;
+  background: linear-gradient(145deg, var(--panel), var(--panel2));
+  border: 2px solid var(--border);
+  box-shadow: var(--shadow), 0 0 0 1px rgba(245, 169, 39, 0.08);
+}
+
+.blog-nav {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.blog-tabs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto;
+  padding: 4px 0;
+  scroll-behavior: smooth;
+}
+
+.blog-tabs-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.blog-scroll-btn {
+  padding: 0 6px;
+  border: none;
+  background: none;
+  color: var(--muted);
+  font-size: 1.15rem;
+  line-height: 1;
+  opacity: 0.85;
+  cursor: pointer;
+  transition: color 0.2s ease, opacity 0.2s ease, transform 0.2s ease;
+}
+
+.blog-scroll-btn:hover {
+  color: var(--text);
+  opacity: 1;
+  transform: translateY(-1px);
+}
+
+.blog-scroll-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.blog-tabs {
+  scrollbar-width: none;
+}
+
+.blog-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.blog-tab {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--muted);
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.2s ease, background 0.2s ease, transform 0.2s ease,
+    box-shadow 0.2s ease, border-color 0.2s ease;
+  white-space: nowrap;
+}
+
+.blog-tab:hover {
+  color: var(--accent);
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateY(-1px);
+}
+
+.blog-tab[aria-selected="true"] {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(245, 169, 39, 0.5);
+  box-shadow: 0 8px 16px rgba(6, 6, 10, 0.35);
+}
+
+.blog-select {
+  display: none;
+  min-width: 180px;
+}
+
+.blog-select-label {
+  display: block;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+
+.blog-select select {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #1c1c24;
+  color: var(--text);
+  font-family: "Inter", "Nunito", sans-serif;
+  font-size: 0.9rem;
+}
+
+.blog-content {
+  display: grid;
+  gap: 10px;
+  max-width: 720px;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.blog-content.is-switching {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.blog-title {
+  margin: 0;
+  font-size: 1.6rem;
+  font-family: "Fredoka", sans-serif;
+}
+
+.blog-date {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.blog-body {
+  color: var(--muted);
+  line-height: 1.7;
+  font-size: 1rem;
+}
+
+.blog-body p {
+  margin: 0 0 14px;
+}
+
+.blog-body p:last-child {
+  margin-bottom: 0;
+}
+
 .links-grid {
   display: grid;
   gap: 18px;
@@ -1329,6 +1496,40 @@ button:focus-visible {
   .projects-grid {
     grid-template-columns: 1fr;
   }
+
+  .blog-shell {
+    padding: 20px;
+  }
+
+  .blog-nav {
+    align-items: stretch;
+  }
+
+  .blog-nav-controls {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .blog-nav-btn {
+    width: auto;
+  }
+
+  .blog-tabs {
+    display: none;
+  }
+
+  .blog-tabs-wrap {
+    display: none;
+  }
+
+  .blog-select {
+    display: block;
+    width: 100%;
+  }
+
+  .blog-content {
+    max-width: 100%;
+  }
 }
 
 
@@ -1384,6 +1585,17 @@ button:focus-visible {
     transition: none;
     transform: none;
     opacity: 1;
+  }
+
+  .blog-content {
+    transition: none;
+    transform: none;
+    opacity: 1;
+  }
+
+  .blog-content.is-switching {
+    opacity: 1;
+    transform: none;
   }
 
   .underline {
