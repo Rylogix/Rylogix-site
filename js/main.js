@@ -164,6 +164,25 @@ const showToast = (message) => {
   }, 1800);
 };
 
+const LOW_END_NOTICE_MESSAGE = "Low end device detected optimizations active";
+let reducedMotionNoticeActive = false;
+
+const maybeShowReducedMotionNotice = (matches) => {
+  if (!matches) {
+    reducedMotionNoticeActive = false;
+    return;
+  }
+  if (reducedMotionNoticeActive) {
+    return;
+  }
+  reducedMotionNoticeActive = true;
+  showToast(LOW_END_NOTICE_MESSAGE);
+};
+
+const handleReducedMotionChange = (event) => {
+  maybeShowReducedMotionNotice(event.matches);
+};
+
 const focusableSelector =
   'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
 let lastFocusedElement = null;
@@ -1318,6 +1337,13 @@ const setupScrollReveal = () => {
 
 renderLinks();
 // Scroll reveal handled in js/effects.js.
+
+maybeShowReducedMotionNotice(prefersReducedMotion.matches);
+if (prefersReducedMotion.addEventListener) {
+  prefersReducedMotion.addEventListener("change", handleReducedMotionChange);
+} else if (prefersReducedMotion.addListener) {
+  prefersReducedMotion.addListener(handleReducedMotionChange);
+}
 
 if (projectsLink && homeLink && projectsSection) {
   setProjectsView(false);
