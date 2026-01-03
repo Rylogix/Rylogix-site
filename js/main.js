@@ -37,12 +37,6 @@ const links = [
     cta: "Lowkey send me a dollar tho",
   },
   {
-    name: "Rec Room",
-    url: "https://rec.net/user/Rylogix",
-    logo: "https://cdn.simpleicons.org/recroom",
-    cta: "My rec.net profile",
-  },
-  {
     name: "Steam",
     url: "https://steamcommunity.com/id/rylogix",
     logo: "https://cdn.simpleicons.org/steam",
@@ -53,6 +47,12 @@ const links = [
     url: "https://www.roblox.com/users/2718945057/profile",
     logo: "https://cdn.simpleicons.org/roblox",
     cta: "Find me on Roblox",
+  },
+  {
+    name: "Rec Room",
+    url: "https://rec.net/user/Rylogix",
+    logo: "https://cdn.simpleicons.org/recroom",
+    cta: "My rec.net profile",
   },
 ];
 
