@@ -109,8 +109,22 @@
               <p class="eyebrow">hello, i'm</p>
               <h1>Rylogix</h1>
               <p class="tagline">
-                Welcome to my website! I'm a 17 year old highschool student, I'm also a small developer and niche content creator.
+                Welcome to my website! I'm a 17 year old highschool student, I'm also a small developer and niche content creator.<button
+                  class="tagline-ellipsis"
+                  id="hero-story-toggle"
+                  type="button"
+                  aria-expanded="false"
+                  aria-controls="hero-story"
+                  aria-label="Read my story"
+                >&hellip;</button>
               </p>
+              <div class="hero-story" id="hero-story" aria-hidden="true">
+                <div class="hero-story-inner">
+                  <p>
+                    I've done a lot of things in life like content creation, photography, coding, and way more. Honestly I haven't stuck with a passion all the way yet but I am going to college for Computer Science to get better with, well, computer science.
+                  </p>
+                </div>
+              </div>
               <div class="hero-actions">
                 <button class="btn btn-ghost" id="contact-button" type="button">
                   Contact me

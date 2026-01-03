@@ -25,6 +25,12 @@ const links = [
     cta: "Here i post variety content",
   },
   {
+    name: "Twitch",
+    url: "https://www.twitch.tv/rylogix",
+    logo: "https://cdn.simpleicons.org/twitch",
+    cta: "I stream occasionally",
+  },
+  {
     name: "Steam",
     url: "https://steamcommunity.com/id/rylogix",
     logo: "https://cdn.simpleicons.org/steam",
@@ -35,12 +41,6 @@ const links = [
     url: "https://cash.app/$RylanGetPaid",
     logo: "https://cdn.simpleicons.org/cashapp",
     cta: "Lowkey send me a dollar tho",
-  },
-  {
-    name: "Twitch",
-    url: "https://www.twitch.tv/rylogix",
-    logo: "https://cdn.simpleicons.org/twitch",
-    cta: "I stream occasionally",
   },
   {
     name: "Roblox",
@@ -90,6 +90,8 @@ const discordText = document.querySelector(".discord-text");
 const presenceBadge = document.getElementById("presence-badge");
 const presenceIcon = document.getElementById("presence-icon");
 const presenceDot = document.getElementById("presence-dot");
+const heroStoryToggle = document.getElementById("hero-story-toggle");
+const heroStory = document.getElementById("hero-story");
 
 let spotifyProgressTimer = null;
 let spotifyProgressState = null;
@@ -213,6 +215,54 @@ const setScrollbarCompensation = () => {
 
 const resetScrollbarCompensation = () => {
   document.body.style.removeProperty("--scrollbar-comp");
+};
+
+// Hero story expand/collapse toggle.
+const setHeroStoryExpanded = (isExpanded) => {
+  if (!heroStory || !heroStoryToggle) {
+    return;
+  }
+
+  heroStoryToggle.setAttribute("aria-expanded", String(isExpanded));
+  heroStory.setAttribute("aria-hidden", String(!isExpanded));
+  heroStory.classList.toggle("is-expanded", isExpanded);
+
+  if (prefersReducedMotion.matches) {
+    heroStory.style.height = isExpanded ? "auto" : "0px";
+    return;
+  }
+
+  if (isExpanded) {
+    heroStory.style.height = `${heroStory.scrollHeight}px`;
+  } else {
+    heroStory.style.height = `${heroStory.scrollHeight}px`;
+    window.requestAnimationFrame(() => {
+      heroStory.style.height = "0px";
+    });
+  }
+};
+
+const syncHeroStoryHeight = () => {
+  if (!heroStory || !heroStory.classList.contains("is-expanded")) {
+    return;
+  }
+
+  if (prefersReducedMotion.matches) {
+    heroStory.style.height = "auto";
+    return;
+  }
+
+  heroStory.style.height = "auto";
+  heroStory.style.height = `${heroStory.scrollHeight}px`;
+};
+
+const handleHeroStoryToggle = () => {
+  if (!heroStoryToggle) {
+    return;
+  }
+
+  const isExpanded = heroStoryToggle.getAttribute("aria-expanded") === "true";
+  setHeroStoryExpanded(!isExpanded);
 };
 
 const uiToggleKeys = new Set();
@@ -1433,6 +1483,20 @@ if (contactBackdrop) {
 
 if (contactForm) {
   contactForm.addEventListener("submit", handleContactSubmit);
+}
+
+if (heroStoryToggle && heroStory) {
+  heroStory.style.height = "0px";
+  heroStoryToggle.addEventListener("click", handleHeroStoryToggle);
+  heroStory.addEventListener("transitionend", (event) => {
+    if (event.propertyName !== "height") {
+      return;
+    }
+    if (heroStory.classList.contains("is-expanded")) {
+      heroStory.style.height = "auto";
+    }
+  });
+  window.addEventListener("resize", syncHeroStoryHeight);
 }
 
 document.addEventListener("keydown", handleContactKeydown);
