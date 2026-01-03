@@ -1312,9 +1312,23 @@ const renderLinks = () => {
         return;
       }
       linksExpanded = true;
-      linksGrid
-        .querySelectorAll(".link-card.is-collapsed")
-        .forEach((card) => card.classList.remove("is-collapsed"));
+      const revealCards = Array.from(
+        linksGrid.querySelectorAll(".link-card.is-collapsed")
+      );
+      revealCards.forEach((card) => {
+        card.style.setProperty("--reveal-delay", "0ms");
+        card.classList.remove("is-collapsed");
+        if (prefersReducedMotion.matches) {
+          card.classList.add("is-visible");
+        } else {
+          card.classList.remove("is-visible");
+        }
+      });
+      if (!prefersReducedMotion.matches) {
+        window.requestAnimationFrame(() => {
+          revealCards.forEach((card) => card.classList.add("is-visible"));
+        });
+      }
       button.disabled = true;
       button.classList.add("is-exiting");
 
