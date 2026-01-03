@@ -31,22 +31,10 @@ const links = [
     cta: "I stream occasionally",
   },
   {
-    name: "Steam",
-    url: "https://steamcommunity.com/id/rylogix",
-    logo: "https://cdn.simpleicons.org/steam",
-    cta: "See my games and friends",
-  },
-  {
     name: "Cash App",
     url: "https://cash.app/$RylanGetPaid",
     logo: "https://cdn.simpleicons.org/cashapp",
     cta: "Lowkey send me a dollar tho",
-  },
-  {
-    name: "Roblox",
-    url: "https://www.roblox.com/users/2718945057/profile",
-    logo: "https://cdn.simpleicons.org/roblox",
-    cta: "Find me on Roblox",
   },
   {
     name: "Rec Room",
@@ -54,9 +42,21 @@ const links = [
     logo: "https://cdn.simpleicons.org/recroom",
     cta: "My rec.net profile",
   },
+  {
+    name: "Steam",
+    url: "https://steamcommunity.com/id/rylogix",
+    logo: "https://cdn.simpleicons.org/steam",
+    cta: "See my games and friends",
+  },
+  {
+    name: "Roblox",
+    url: "https://www.roblox.com/users/2718945057/profile",
+    logo: "https://cdn.simpleicons.org/roblox",
+    cta: "Find me on Roblox",
+  },
 ];
 
-const VISIBLE_LINK_COUNT = 8;
+const VISIBLE_LINK_COUNT = 7;
 let linksExpanded = false;
 
 const toast = document.getElementById("toast");
