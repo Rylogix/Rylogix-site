@@ -56,7 +56,7 @@ const links = [
   },
 ];
 
-const VISIBLE_LINK_COUNT = 7;
+const VISIBLE_LINK_COUNT = 6;
 let linksExpanded = false;
 
 const toast = document.getElementById("toast");
