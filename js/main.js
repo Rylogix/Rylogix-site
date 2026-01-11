@@ -68,10 +68,8 @@ const contactClose = document.getElementById("contact-close");
 const contactForm = document.getElementById("contact-form");
 const contactStatus = document.getElementById("contact-status");
 const projectsLink = document.getElementById("projects-link");
-const blogsLink = document.getElementById("blogs-link");
 const homeLink = document.getElementById("home-link");
 const projectsSection = document.getElementById("projects");
-const blogsSection = document.getElementById("blogs");
 const homeSections = document.querySelectorAll("[data-home-section]");
 const prefersReducedMotion = window.matchMedia(
   "(prefers-reduced-motion: reduce)"
@@ -80,7 +78,6 @@ const VIEW_TRANSITION_MS = 280;
 const VIEW_SWAP_DELAY = 400;
 const VIEW_HOME = "home";
 const VIEW_PROJECTS = "projects";
-const VIEW_BLOGS = "blogs";
 let currentView = null;
 let viewSwapTimeoutId = null;
 const discordCard = document.getElementById("discord-card");
@@ -411,7 +408,6 @@ const setView = (view) => {
 
   currentView = view;
   document.body.classList.toggle("show-projects", view === VIEW_PROJECTS);
-  document.body.classList.toggle("show-blogs", view === VIEW_BLOGS);
 
   if (viewSwapTimeoutId) {
     window.clearTimeout(viewSwapTimeoutId);
@@ -430,9 +426,6 @@ const setView = (view) => {
     if (projectsSection) {
       hideSection(projectsSection);
     }
-    if (blogsSection) {
-      hideSection(blogsSection);
-    }
     schedule(() => {
       homeSections.forEach((section) => showSection(section));
     });
@@ -442,27 +435,12 @@ const setView = (view) => {
   homeSections.forEach((section) => hideSection(section));
 
   if (view === VIEW_PROJECTS) {
-    if (blogsSection) {
-      hideSection(blogsSection);
-    }
     schedule(() => {
       if (projectsSection) {
         showSection(projectsSection);
       }
     });
     return;
-  }
-
-  if (view === VIEW_BLOGS) {
-    if (projectsSection) {
-      hideSection(projectsSection);
-    }
-    schedule(() => {
-      if (blogsSection) {
-        showSection(blogsSection);
-      }
-      document.dispatchEvent(new Event("blogs:shown"));
-    });
   }
 };
 
@@ -498,33 +476,13 @@ const handleHomeNavClick = (event) => {
   if (!shouldHandleNavClick(event)) {
     return;
   }
-  if (!projectsSection && !blogsSection) {
+  if (!projectsSection) {
     return;
   }
   event.preventDefault();
   setView(VIEW_HOME);
   if (window.location.hash) {
     window.history.pushState(null, "", window.location.pathname);
-  }
-};
-
-const handleBlogsNavClick = (event) => {
-  if (!shouldHandleNavClick(event)) {
-    return;
-  }
-
-  if (!blogsSection) {
-    return;
-  }
-
-  event.preventDefault();
-  setView(VIEW_BLOGS);
-  blogsSection.scrollIntoView({
-    behavior: prefersReducedMotion.matches ? "auto" : "smooth",
-    block: "start",
-  });
-  if (window.location.hash) {
-    window.history.replaceState(null, "", window.location.pathname);
   }
 };
 
@@ -1469,16 +1427,13 @@ if (prefersReducedMotion.addEventListener) {
   prefersReducedMotion.addListener(handleReducedMotionChange);
 }
 
-if (homeLink && (projectsSection || blogsSection)) {
+if (homeLink && projectsSection) {
   setView(VIEW_HOME);
   if (window.location.hash) {
     window.history.replaceState(null, "", window.location.pathname);
   }
   if (projectsLink && projectsSection) {
     projectsLink.addEventListener("click", handleProjectsNavClick);
-  }
-  if (blogsLink && blogsSection) {
-    blogsLink.addEventListener("click", handleBlogsNavClick);
   }
   homeLink.addEventListener("click", handleHomeNavClick);
 }
