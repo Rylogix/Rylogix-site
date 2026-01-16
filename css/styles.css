@@ -8,6 +8,12 @@
   --accent: #f5a927;
   --border: #14141d;
   --shadow: 0 14px 28px rgba(8, 8, 12, 0.6);
+  --decal-black: #000000;
+  --decal-white: #ffffff;
+  --decal-yellow: #ffd400;
+  --decal-black-rgb: 0, 0, 0;
+  --decal-white-rgb: 255, 255, 255;
+  --decal-yellow-rgb: 255, 212, 0;
 }
 
 *,
@@ -25,38 +31,76 @@ body {
   margin: 0;
   font-family: "Inter", "Nunito", sans-serif;
   color: var(--text);
-  background-color: var(--bg);
-  background-image: radial-gradient(
-      circle at top left,
-      rgba(245, 169, 39, 0.28),
-      transparent 50%
-    ),
-    radial-gradient(
-      circle at 80% 20%,
-      rgba(255, 255, 255, 0.08),
-      transparent 45%
-    ),
-    radial-gradient(
-      circle at 20% 80%,
-      rgba(255, 255, 255, 0.06),
-      transparent 50%
-    );
-  background-attachment: fixed;
-  background-repeat: no-repeat;
+  background-color: var(--decal-black);
   min-height: 100vh;
   overflow-y: scroll;
 }
 
-#bg-canvas {
+/* Rocket League-inspired decal background layers. */
+.decal-bg {
   position: fixed;
   inset: 0;
   width: 100%;
   height: 100%;
   z-index: -1;
   pointer-events: none;
+  background: var(--decal-black);
+  overflow: hidden;
 }
 
-body.ui-hidden > *:not(#bg-canvas) {
+.decal-layer {
+  position: absolute;
+  inset: -30% -30%;
+  background-repeat: repeat;
+  will-change: background-position, opacity;
+}
+
+.decal-base {
+  opacity: 0.75;
+  background-image: repeating-linear-gradient(
+      118deg,
+      rgba(var(--decal-white-rgb), 0.08) 0 8px,
+      rgba(var(--decal-black-rgb), 0) 8px 40px
+    ),
+    repeating-linear-gradient(
+      118deg,
+      rgba(var(--decal-white-rgb), 0.14) 0 3px,
+      rgba(var(--decal-black-rgb), 0) 3px 120px
+    );
+  animation: decal-slow 26s linear infinite;
+}
+
+.decal-stripes {
+  opacity: 0.85;
+  background-image: repeating-linear-gradient(
+      102deg,
+      rgba(var(--decal-white-rgb), 0.2) 0 3px,
+      rgba(var(--decal-black-rgb), 0) 3px 26px
+    ),
+    repeating-linear-gradient(
+      102deg,
+      rgba(var(--decal-white-rgb), 0.08) 0 1px,
+      rgba(var(--decal-black-rgb), 0) 1px 14px
+    );
+  animation: decal-mid 16s linear infinite;
+}
+
+.decal-accents {
+  opacity: 0.9;
+  background-image: repeating-linear-gradient(
+      110deg,
+      rgba(var(--decal-yellow-rgb), 0.9) 0 2px,
+      rgba(var(--decal-yellow-rgb), 0) 2px 22px
+    ),
+    repeating-linear-gradient(
+      110deg,
+      rgba(var(--decal-yellow-rgb), 0.45) 0 1px,
+      rgba(var(--decal-yellow-rgb), 0) 1px 80px
+    );
+  animation: decal-fast 7s linear infinite, decal-pulse 2.8s ease-in-out infinite;
+}
+
+body.ui-hidden > *:not(.decal-bg) {
   display: none;
 }
 
@@ -1401,6 +1445,43 @@ button:focus-visible {
   }
 }
 
+@keyframes decal-slow {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: -1400px 240px;
+  }
+}
+
+@keyframes decal-mid {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: -1800px 320px;
+  }
+}
+
+@keyframes decal-fast {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: -2200px 420px;
+  }
+}
+
+@keyframes decal-pulse {
+  0%,
+  100% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 0.95;
+  }
+}
+
 
 @media (min-width: 720px) {
   .links-grid {
@@ -1508,4 +1589,7 @@ button:focus-visible {
     transform: translateX(25%);
   }
 
+  .decal-layer {
+    animation: none;
+  }
 }

@@ -105,6 +105,7 @@ const DISCORD_ACTIVITY_LABELS = {
   3: "Watching",
   5: "Competing in",
 };
+const DEFAULT_DISCORD_STATUS_TEXT = "doing nothing.";
 
 const fallbackSvg = `
   <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -809,9 +810,28 @@ const getActivityAssetUrl = (activity) => {
   return null;
 };
 
-const formatDiscordActivity = (activity) => {
+const getCustomStatusText = (activities) => {
+  if (!Array.isArray(activities)) {
+    return "";
+  }
+
+  const customStatus = activities.find(
+    (activity) =>
+      activity && (activity.type === 4 || activity.name === "Custom Status")
+  );
+
+  if (!customStatus) {
+    return "";
+  }
+
+  const emoji = customStatus.emoji && customStatus.emoji.name;
+  const text = customStatus.state || customStatus.details || "";
+  return [emoji, text].filter(Boolean).join(" ").trim();
+};
+
+const formatDiscordActivity = (activity, customStatusText) => {
   if (!activity || !activity.name) {
-    return "Doing nothing.";
+    return customStatusText || DEFAULT_DISCORD_STATUS_TEXT;
   }
 
   const label =
@@ -1161,9 +1181,12 @@ const updateDiscordPresence = async () => {
     );
     const gameActivity = getPrimaryNonSpotifyActivity(activities);
     const activePlatform = getActivePlatform(data);
+    const customStatusText = getCustomStatusText(activities);
 
     setDiscordStatus(status);
-    setDiscordActivity(formatDiscordActivity(primaryActivity));
+    setDiscordActivity(
+      formatDiscordActivity(primaryActivity, customStatusText)
+    );
     setPresenceIndicator(status, activePlatform);
     renderDiscordWidgets({
       spotify: data.spotify,

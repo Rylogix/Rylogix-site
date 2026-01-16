@@ -38,7 +38,11 @@
     <title>Rylogix</title>
   </head>
   <body>
-    <canvas id="bg-canvas" aria-hidden="true"></canvas>
+    <div class="decal-bg" aria-hidden="true">
+      <span class="decal-layer decal-base"></span>
+      <span class="decal-layer decal-stripes"></span>
+      <span class="decal-layer decal-accents"></span>
+    </div>
     <header class="topbar">
       <div class="container topbar-inner">
         <nav class="brand" aria-label="Primary">
@@ -98,7 +102,7 @@
             <div class="discord-text">
               <div class="discord-header">
                 <p class="discord-activity" id="discord-activity">
-                  Doing nothing.
+                  doing nothing.
                 </p>
               </div>
             </div>
@@ -341,7 +345,6 @@
 
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-    <script src="js/particles-bg.js" defer></script>
     <script src="js/main.js?v=3"></script>
     <script src="js/effects.js" defer></script>
     <script>
