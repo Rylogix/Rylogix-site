@@ -403,6 +403,161 @@
     });
   };
 
+  // Animated constellation background using evenly spaced points.
+  const initConstellation = () => {
+    const canvas = document.querySelector(".constellation-canvas");
+    if (!canvas) {
+      return;
+    }
+
+    const context = canvas.getContext("2d");
+    if (!context) {
+      return;
+    }
+
+    if (prefersReducedMotion.matches) {
+      canvas.style.display = "none";
+      return;
+    }
+
+    const state = {
+      width: 0,
+      height: 0,
+      ratio: 1,
+      points: [],
+      linkDistance: 0,
+      lastTime: performance.now(),
+      rafId: null,
+      paused: false,
+    };
+
+    const halton = (index, base) => {
+      let result = 0;
+      let f = 1 / base;
+      let i = index;
+      while (i > 0) {
+        result += f * (i % base);
+        i = Math.floor(i / base);
+        f /= base;
+      }
+      return result;
+    };
+
+    const buildPoints = () => {
+      const area = state.width * state.height;
+      const count = clamp(Math.round(area / 16000), 35, 120);
+      const minDim = Math.min(state.width, state.height);
+      const speedBase = minDim * 0.00035;
+
+      state.linkDistance = minDim * 0.18;
+      state.points = [];
+
+      for (let i = 1; i <= count; i += 1) {
+        const x = halton(i, 2) * state.width;
+        const y = halton(i, 3) * state.height;
+        const angle = (i * 137.5 * Math.PI) / 180;
+        const speed = speedBase * (0.7 + (i % 7) * 0.08);
+        state.points.push({
+          x,
+          y,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          radius: 0.8 + (i % 3) * 0.45,
+        });
+      }
+    };
+
+    const resize = () => {
+      state.width = Math.max(1, window.innerWidth);
+      state.height = Math.max(1, window.innerHeight);
+      state.ratio = Math.min(window.devicePixelRatio || 1, 2);
+
+      canvas.width = Math.round(state.width * state.ratio);
+      canvas.height = Math.round(state.height * state.ratio);
+      canvas.style.width = `${state.width}px`;
+      canvas.style.height = `${state.height}px`;
+      context.setTransform(state.ratio, 0, 0, state.ratio, 0, 0);
+
+      buildPoints();
+    };
+
+    const update = (delta) => {
+      const margin = 14;
+      state.points.forEach((point) => {
+        point.x += point.vx * delta;
+        point.y += point.vy * delta;
+
+        if (point.x < margin || point.x > state.width - margin) {
+          point.vx *= -1;
+        }
+        if (point.y < margin || point.y > state.height - margin) {
+          point.vy *= -1;
+        }
+      });
+    };
+
+    const draw = () => {
+      context.clearRect(0, 0, state.width, state.height);
+
+      const points = state.points;
+      const linkDistance = state.linkDistance;
+      const linkDistanceSq = linkDistance * linkDistance;
+
+      for (let i = 0; i < points.length; i += 1) {
+        for (let j = i + 1; j < points.length; j += 1) {
+          const dx = points[i].x - points[j].x;
+          const dy = points[i].y - points[j].y;
+          const distSq = dx * dx + dy * dy;
+
+          if (distSq < linkDistanceSq) {
+            const dist = Math.sqrt(distSq);
+            const alpha = (1 - dist / linkDistance) * 0.35;
+            context.strokeStyle = `rgba(255, 255, 255, ${alpha.toFixed(3)})`;
+            context.lineWidth = 1;
+            context.beginPath();
+            context.moveTo(points[i].x, points[i].y);
+            context.lineTo(points[j].x, points[j].y);
+            context.stroke();
+          }
+        }
+      }
+
+      points.forEach((point) => {
+        const alpha = 0.5 + (point.radius - 0.8) * 0.25;
+        context.fillStyle = `rgba(255, 255, 255, ${alpha.toFixed(3)})`;
+        context.beginPath();
+        context.arc(point.x, point.y, point.radius, 0, Math.PI * 2);
+        context.fill();
+      });
+    };
+
+    const step = (now) => {
+      if (state.paused) {
+        state.lastTime = now;
+        state.rafId = window.requestAnimationFrame(step);
+        return;
+      }
+
+      const delta = Math.min((now - state.lastTime) / 16.67, 2);
+      state.lastTime = now;
+      update(delta);
+      draw();
+      state.rafId = window.requestAnimationFrame(step);
+    };
+
+    const handleVisibilityChange = () => {
+      state.paused = document.hidden;
+    };
+
+    resize();
+    window.addEventListener("resize", () => {
+      window.requestAnimationFrame(resize);
+    });
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    state.rafId = window.requestAnimationFrame(step);
+  };
+
   // Pause breathing effects when the page is hidden.
   const handleVisibility = () => {
     document.body.classList.toggle("effects-paused", document.hidden);
@@ -412,6 +567,7 @@
     resolveTiltTargets().forEach(initTilt);
     initScrollReveal();
     initSmoothScroll();
+    initConstellation();
     handleVisibility();
     document.addEventListener("visibilitychange", handleVisibility);
   };
