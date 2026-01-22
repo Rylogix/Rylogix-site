@@ -67,6 +67,10 @@ const contactBackdrop = document.getElementById("contact-backdrop");
 const contactClose = document.getElementById("contact-close");
 const contactForm = document.getElementById("contact-form");
 const contactStatus = document.getElementById("contact-status");
+const supportButton = document.getElementById("support-button");
+const supportModal = document.getElementById("support-modal");
+const supportBackdrop = document.getElementById("support-backdrop");
+const supportClose = document.getElementById("support-close");
 const projectsLink = document.getElementById("projects-link");
 const homeLink = document.getElementById("home-link");
 const projectsSection = document.getElementById("projects");
@@ -192,12 +196,12 @@ const focusableSelector =
   'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
 let lastFocusedElement = null;
 
-const getFocusableElements = () => {
-  if (!contactModal) {
+const getFocusableElements = (modal) => {
+  if (!modal) {
     return [];
   }
 
-  return Array.from(contactModal.querySelectorAll(focusableSelector)).filter(
+  return Array.from(modal.querySelectorAll(focusableSelector)).filter(
     (element) => !element.hasAttribute("disabled")
   );
 };
@@ -345,6 +349,39 @@ const setContactModalOrigin = () => {
 
   contactModal.style.setProperty("--contact-origin-x", `${deltaX}px`);
   contactModal.style.setProperty("--contact-origin-y", `${deltaY}px`);
+};
+
+const setSupportModalOrigin = () => {
+  if (!supportModal) {
+    return;
+  }
+
+  const modalInner = supportModal.querySelector(".contact-modal-inner");
+  if (!modalInner || !supportButton) {
+    supportModal.style.setProperty("--contact-origin-x", "0px");
+    supportModal.style.setProperty("--contact-origin-y", "0px");
+    return;
+  }
+
+  const buttonRect = supportButton.getBoundingClientRect();
+  const modalRect = modalInner.getBoundingClientRect();
+
+  if (buttonRect.width === 0 && buttonRect.height === 0) {
+    supportModal.style.setProperty("--contact-origin-x", "0px");
+    supportModal.style.setProperty("--contact-origin-y", "0px");
+    return;
+  }
+
+  const buttonCenterX = buttonRect.left + buttonRect.width / 2;
+  const buttonCenterY = buttonRect.top + buttonRect.height / 2;
+  const modalCenterX = modalRect.left + modalRect.width / 2;
+  const modalCenterY = modalRect.top + modalRect.height / 2;
+
+  const deltaX = Math.round(buttonCenterX - modalCenterX);
+  const deltaY = Math.round(buttonCenterY - modalCenterY);
+
+  supportModal.style.setProperty("--contact-origin-x", `${deltaX}px`);
+  supportModal.style.setProperty("--contact-origin-y", `${deltaY}px`);
 };
 
 const showSection = (section) => {
@@ -505,7 +542,7 @@ const openContactModal = () => {
     contactStatus.classList.remove("success", "error");
   }
 
-  const focusable = getFocusableElements();
+  const focusable = getFocusableElements(contactModal);
   if (focusable.length > 0) {
     focusable[0].focus();
   }
@@ -542,7 +579,74 @@ const handleContactKeydown = (event) => {
     return;
   }
 
-  const focusable = getFocusableElements();
+  const focusable = getFocusableElements(contactModal);
+  if (focusable.length === 0) {
+    return;
+  }
+
+  const first = focusable[0];
+  const last = focusable[focusable.length - 1];
+
+  if (event.shiftKey && document.activeElement === first) {
+    event.preventDefault();
+    last.focus();
+  } else if (!event.shiftKey && document.activeElement === last) {
+    event.preventDefault();
+    first.focus();
+  }
+};
+
+const openSupportModal = () => {
+  if (!supportModal || !supportBackdrop) {
+    return;
+  }
+
+  lastFocusedElement = document.activeElement;
+  setSupportModalOrigin();
+  setScrollbarCompensation();
+  supportModal.classList.add("open");
+  supportBackdrop.classList.add("open");
+  document.body.classList.add("modal-open");
+  supportModal.setAttribute("aria-hidden", "false");
+
+  const focusable = getFocusableElements(supportModal);
+  if (focusable.length > 0) {
+    focusable[0].focus();
+  }
+};
+
+const closeSupportModal = () => {
+  if (!supportModal || !supportBackdrop) {
+    return;
+  }
+
+  supportModal.classList.remove("open");
+  supportBackdrop.classList.remove("open");
+  document.body.classList.remove("modal-open");
+  resetScrollbarCompensation();
+  supportModal.setAttribute("aria-hidden", "true");
+
+  if (lastFocusedElement && typeof lastFocusedElement.focus === "function") {
+    lastFocusedElement.focus();
+  }
+};
+
+const handleSupportKeydown = (event) => {
+  if (!supportModal || !supportModal.classList.contains("open")) {
+    return;
+  }
+
+  if (event.key === "Escape") {
+    event.preventDefault();
+    closeSupportModal();
+    return;
+  }
+
+  if (event.key !== "Tab") {
+    return;
+  }
+
+  const focusable = getFocusableElements(supportModal);
   if (focusable.length === 0) {
     return;
   }
@@ -1477,6 +1581,18 @@ if (contactForm) {
   contactForm.addEventListener("submit", handleContactSubmit);
 }
 
+if (supportButton) {
+  supportButton.addEventListener("click", openSupportModal);
+}
+
+if (supportClose) {
+  supportClose.addEventListener("click", closeSupportModal);
+}
+
+if (supportBackdrop) {
+  supportBackdrop.addEventListener("click", closeSupportModal);
+}
+
 if (heroStoryToggle && heroStory) {
   heroStory.style.height = "0px";
   heroStoryToggle.addEventListener("click", handleHeroStoryToggle);
@@ -1492,6 +1608,7 @@ if (heroStoryToggle && heroStory) {
 }
 
 document.addEventListener("keydown", handleContactKeydown);
+document.addEventListener("keydown", handleSupportKeydown);
 document.addEventListener("keydown", handleUiToggleKeydown);
 document.addEventListener("keyup", handleUiToggleKeyup);
 window.addEventListener("blur", () => {

@@ -719,6 +719,54 @@ button {
   transform: translateY(0);
 }
 
+#support-button {
+  position: relative;
+  padding: 14px 32px;
+  font-size: 1.05rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #33e27c, #1fb35d 55%, #2fe389);
+  color: #0e1c13;
+  border: 1px solid rgba(68, 237, 149, 0.55);
+  box-shadow: 0 12px 24px rgba(17, 120, 61, 0.45),
+    0 0 18px rgba(66, 232, 145, 0.35);
+  overflow: hidden;
+}
+
+#support-button::after {
+  content: "";
+  position: absolute;
+  top: -60%;
+  left: -40%;
+  width: 60%;
+  height: 220%;
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.75) 45%,
+    rgba(255, 255, 255, 0) 80%
+  );
+  opacity: 0;
+  transform: translateX(-120%);
+  pointer-events: none;
+}
+
+#support-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 16px 30px rgba(12, 110, 56, 0.5),
+    0 0 20px rgba(78, 240, 157, 0.45);
+}
+
+#support-button:hover::after,
+#support-button:focus-visible::after {
+  opacity: 0.7;
+  animation: shimmer 0.9s ease;
+}
+
+#support-button:active {
+  animation: none;
+  transform: translateY(0);
+}
+
 .section-title {
   display: flex;
   align-items: center;
@@ -1298,6 +1346,51 @@ button {
 
 .contact-modal .contact-status.error {
   color: #f08f8f;
+}
+
+.support-modal .contact-modal-inner {
+  width: min(460px, 92vw);
+  border: 1px solid rgba(68, 237, 149, 0.25);
+  box-shadow: 0 20px 40px rgba(8, 12, 10, 0.4),
+    0 0 22px rgba(46, 210, 125, 0.2);
+}
+
+.support-modal h2 {
+  color: #d7f7e2;
+  text-shadow: 0 0 14px rgba(52, 226, 124, 0.22);
+}
+
+.support-copy {
+  margin: 0 0 16px;
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.support-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.support-list li {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 0.95rem;
+}
+
+.support-label {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.support-value {
+  color: #bff2d0;
+  font-weight: 500;
 }
 
 body.modal-open {
