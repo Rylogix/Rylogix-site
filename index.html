@@ -34,7 +34,37 @@
       href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Inter:wght@400;500;600&display=swap"
     />
 
-    <link rel="stylesheet" href="css/styles.css?v=3" />
+    <script>
+      (function () {
+        const key = "rylogix-theme";
+        let theme = null;
+
+        try {
+          theme = localStorage.getItem(key);
+        } catch (error) {}
+
+        if (theme !== "light" && theme !== "dark") {
+          theme =
+            window.matchMedia &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches
+              ? "dark"
+              : "light";
+        }
+
+        document.documentElement.setAttribute("data-theme", theme);
+        document.documentElement.style.colorScheme = theme;
+
+        const metaTheme = document.querySelector('meta[name="theme-color"]');
+        if (metaTheme) {
+          metaTheme.setAttribute(
+            "content",
+            theme === "dark" ? "#0f1117" : "#f5f7fb"
+          );
+        }
+      })();
+    </script>
+
+    <link rel="stylesheet" href="css/styles.css?v=4" />
     <title>Rylogix</title>
   </head>
   <body>
@@ -59,6 +89,17 @@
           <a class="topbar-link" id="projects-link" href="#projects">Projects</a>
         </nav>
         <div class="topbar-nav" aria-live="polite">
+          <button
+            class="theme-toggle"
+            id="theme-toggle"
+            type="button"
+            aria-pressed="false"
+            aria-label="Toggle color theme"
+            title="Toggle color theme"
+          >
+            <span class="theme-toggle-icon" aria-hidden="true">◐</span>
+            <span class="theme-toggle-text">Theme</span>
+          </button>
           <div class="visitor-card" role="status" aria-live="polite">
             <img
               class="visitor-icon"
@@ -79,7 +120,6 @@
             class="discord-card glow-card"
             id="discord-card"
             data-status="offline"
-            data-reveal
             href="https://discord.com/users/1068673520495775745"
             target="_blank"
             rel="noopener noreferrer"
@@ -110,7 +150,7 @@
               <p class="eyebrow">hello, i'm</p>
               <h1>Rylogix</h1>
               <p class="tagline">
-                Welcome to my website! I'm a 17 year old highschool student, I'm also a small developer and niche content creator.<button
+                17-year-old high school student, small developer, and niche content creator.<button
                   class="tagline-ellipsis"
                   id="hero-story-toggle"
                   type="button"
@@ -248,53 +288,6 @@
         </div>
       </section>
 
-      <section class="tech view-section" id="tech" data-home-section>
-        <div class="container">
-          <div class="section-title" data-reveal>
-            <h2>Tech</h2>
-            <span class="underline"></span>
-          </div>
-          <ul class="tech-list" role="list">
-            <li data-reveal>
-              <span class="tech-label">PC:</span>
-              Gaming laptop, Ryzen 5 6000 CPU and AMD RADEON GRAPHICS
-            </li>
-            <li data-reveal>
-              <span class="tech-label">Keyboard:</span>
-              <a
-                href="https://steelseries.com/gaming-keyboards/apex-3"
-                target="_blank"
-                rel="noopener noreferrer"
-              >SteelSeries Apex 3</a>
-            </li>
-            <li data-reveal>
-              <span class="tech-label">Mouse:</span>
-              <a
-                href="https://www.logitechg.com/en-us/shop/p/g305-lightspeed-wireless-gaming-mouse"
-                target="_blank"
-                rel="noopener noreferrer"
-              >Logitech G305</a>
-            </li>
-            <li data-reveal>
-              <span class="tech-label">Mic:</span>
-              <a
-                href="https://www.maono.com/products/maono-pd300x-usb-and-xlr-dynamic-microphone"
-                target="_blank"
-                rel="noopener noreferrer"
-              >PD300X</a>
-            </li>
-            <li data-reveal>
-              <span class="tech-label">Headphones:</span>
-              <a
-                href="https://hyperx.com/products/hyperx-cloud-alpha"
-                target="_blank"
-                rel="noopener noreferrer"
-              >HyperX Cloud Alpha</a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
     </main>
 
     <footer class="site-footer" data-home-section>
@@ -398,8 +391,8 @@
 
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-    <script src="js/main.js?v=3"></script>
-    <script src="js/effects.js" defer></script>
+    <script src="js/main.js?v=4"></script>
+    <script src="js/effects.js?v=4" defer></script>
     <script>
       (function() {
         const domain = encodeURIComponent(window.location.hostname);

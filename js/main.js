@@ -56,9 +56,6 @@ const links = [
   },
 ];
 
-const VISIBLE_LINK_COUNT = 6;
-let linksExpanded = false;
-
 const toast = document.getElementById("toast");
 const linksGrid = document.getElementById("links-grid");
 const contactButton = document.getElementById("contact-button");
@@ -102,6 +99,7 @@ let activityElapsedState = null;
 const DISCORD_USER_ID = "1068673520495775745";
 const DISCORD_API_URL = `https://api.lanyard.rest/v1/users/${DISCORD_USER_ID}`;
 const DISCORD_AVATAR_KEY = `discord-avatar-${DISCORD_USER_ID}`;
+const ICON_ACCENT_HEX = "ffa616";
 const DISCORD_ACTIVITY_LABELS = {
   0: "Playing",
   1: "Streaming",
@@ -171,25 +169,6 @@ const showToast = (message) => {
   showToast.timeoutId = window.setTimeout(() => {
     toast.classList.remove("show");
   }, 1800);
-};
-
-const LOW_END_NOTICE_MESSAGE = "Low end device detected optimizations active";
-let reducedMotionNoticeActive = false;
-
-const maybeShowReducedMotionNotice = (matches) => {
-  if (!matches) {
-    reducedMotionNoticeActive = false;
-    return;
-  }
-  if (reducedMotionNoticeActive) {
-    return;
-  }
-  reducedMotionNoticeActive = true;
-  showToast(LOW_END_NOTICE_MESSAGE);
-};
-
-const handleReducedMotionChange = (event) => {
-  maybeShowReducedMotionNotice(event.matches);
 };
 
 const focusableSelector =
@@ -1336,6 +1315,25 @@ const copyText = async (text) => {
 };
 
 // Build a logo block with Clearbit + SVG fallback.
+const withAccentIconColor = (logoUrl) => {
+  if (typeof logoUrl !== "string" || !logoUrl.includes("cdn.simpleicons.org/")) {
+    return logoUrl;
+  }
+
+  try {
+    const parsed = new URL(logoUrl);
+    const parts = parsed.pathname.split("/").filter(Boolean);
+    if (parts.length >= 2) {
+      return parsed.toString();
+    }
+    parsed.pathname = `${parsed.pathname.replace(/\/+$/, "")}/${ICON_ACCENT_HEX}`;
+    return parsed.toString();
+  } catch (error) {
+    const trimmed = logoUrl.replace(/\/+$/, "");
+    return `${trimmed}/${ICON_ACCENT_HEX}`;
+  }
+};
+
 const createLogo = (logoUrl, label) => {
   const wrap = document.createElement("div");
   wrap.className = "logo-wrap";
@@ -1345,9 +1343,10 @@ const createLogo = (logoUrl, label) => {
 
   const img = document.createElement("img");
   img.alt = `${label} logo`;
-  img.loading = "lazy";
+  img.loading = "eager";
+  img.fetchPriority = "high";
   img.decoding = "async";
-  img.src = logoUrl;
+  img.src = withAccentIconColor(logoUrl);
 
   const fallback = document.createElement("span");
   fallback.className = "logo-fallback";
@@ -1382,53 +1381,7 @@ const renderLinks = () => {
 
   linksGrid.innerHTML = "";
 
-  const shouldCollapse =
-    !linksExpanded && links.length > VISIBLE_LINK_COUNT;
-
-  const createSeeMore = () => {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = "links-toggle";
-    button.textContent = "See more";
-    button.setAttribute("data-reveal", "");
-
-    button.addEventListener("click", () => {
-      if (button.classList.contains("is-exiting")) {
-        return;
-      }
-      linksExpanded = true;
-      const revealCards = Array.from(
-        linksGrid.querySelectorAll(".link-card.is-collapsed")
-      );
-      revealCards.forEach((card) => {
-        card.style.setProperty("--reveal-delay", "0ms");
-        card.classList.remove("is-collapsed");
-        if (prefersReducedMotion.matches) {
-          card.classList.add("is-visible");
-        } else {
-          card.classList.remove("is-visible");
-        }
-      });
-      if (!prefersReducedMotion.matches) {
-        window.requestAnimationFrame(() => {
-          revealCards.forEach((card) => card.classList.add("is-visible"));
-        });
-      }
-      button.disabled = true;
-      button.classList.add("is-exiting");
-
-      const removeButton = () => {
-        button.remove();
-      };
-
-      button.addEventListener("transitionend", removeButton, { once: true });
-      window.setTimeout(removeButton, 320);
-    });
-
-    return button;
-  };
-
-  links.forEach((link, index) => {
+  links.forEach((link) => {
     const card = document.createElement("a");
     card.className = "link-card";
     card.setAttribute("data-reveal", "");
@@ -1459,14 +1412,6 @@ const renderLinks = () => {
     card.appendChild(external);
 
     linksGrid.appendChild(card);
-
-    if (shouldCollapse && index === VISIBLE_LINK_COUNT - 1) {
-      linksGrid.appendChild(createSeeMore());
-    }
-
-    if (shouldCollapse && index >= VISIBLE_LINK_COUNT) {
-      card.classList.add("is-collapsed");
-    }
   });
 };
 
@@ -1547,13 +1492,6 @@ const setupScrollReveal = () => {
 renderLinks();
 // Scroll reveal handled in js/effects.js.
 
-maybeShowReducedMotionNotice(prefersReducedMotion.matches);
-if (prefersReducedMotion.addEventListener) {
-  prefersReducedMotion.addEventListener("change", handleReducedMotionChange);
-} else if (prefersReducedMotion.addListener) {
-  prefersReducedMotion.addListener(handleReducedMotionChange);
-}
-
 if (homeLink && projectsSection) {
   setView(VIEW_HOME);
   if (window.location.hash) {
@@ -1577,6 +1515,14 @@ if (contactBackdrop) {
   contactBackdrop.addEventListener("click", closeContactModal);
 }
 
+if (contactModal) {
+  contactModal.addEventListener("click", (event) => {
+    if (event.target === contactModal) {
+      closeContactModal();
+    }
+  });
+}
+
 if (contactForm) {
   contactForm.addEventListener("submit", handleContactSubmit);
 }
@@ -1591,6 +1537,14 @@ if (supportClose) {
 
 if (supportBackdrop) {
   supportBackdrop.addEventListener("click", closeSupportModal);
+}
+
+if (supportModal) {
+  supportModal.addEventListener("click", (event) => {
+    if (event.target === supportModal) {
+      closeSupportModal();
+    }
+  });
 }
 
 if (heroStoryToggle && heroStory) {

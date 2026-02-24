@@ -17,15 +17,15 @@
 
   // Core tuning knobs.
   const TILT_SETTINGS = {
-    maxTilt: 6,
-    maxLift: 4,
-    maxScale: 1.01,
-    smoothing: 0.3,
+    maxTilt: 4,
+    maxLift: 3,
+    maxScale: 1.008,
+    smoothing: 0.24,
   };
 
   const REVEAL_SETTINGS = {
-    staggerStep: 80,
-    staggerMax: 240,
+    staggerStep: 60,
+    staggerMax: 180,
   };
 
   const SCROLL_SETTINGS = {
@@ -36,9 +36,101 @@
   const prefersReducedMotion = window.matchMedia(
     "(prefers-reduced-motion: reduce)"
   );
-  const coarsePointer = window.matchMedia("(pointer: coarse)");
+  const themePreference = window.matchMedia("(prefers-color-scheme: dark)");
+  const THEME_KEY = "rylogix-theme";
+  const THEME_COLORS = {
+    dark: "#0f1117",
+    light: "#f5f7fb",
+  };
 
   const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+  const readStoredTheme = () => {
+    try {
+      const value = window.localStorage.getItem(THEME_KEY);
+      return value === "light" || value === "dark" ? value : null;
+    } catch (error) {
+      return null;
+    }
+  };
+  const getSystemTheme = () => (themePreference.matches ? "dark" : "light");
+  const getCurrentTheme = () => {
+    const current = document.documentElement.getAttribute("data-theme");
+    return current === "light" || current === "dark"
+      ? current
+      : readStoredTheme() || getSystemTheme();
+  };
+  const setThemeMetaColor = (theme) => {
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (!meta) {
+      return;
+    }
+    meta.setAttribute("content", THEME_COLORS[theme] || THEME_COLORS.dark);
+  };
+  const syncThemeToggle = (theme) => {
+    const toggle = document.getElementById("theme-toggle");
+    if (!toggle) {
+      return;
+    }
+
+    const icon = toggle.querySelector(".theme-toggle-icon");
+    const nextTheme = theme === "dark" ? "light" : "dark";
+
+    toggle.setAttribute("aria-pressed", String(theme === "dark"));
+    toggle.setAttribute("aria-label", `Switch to ${nextTheme} mode`);
+    toggle.setAttribute("title", `Switch to ${nextTheme} mode`);
+    toggle.dataset.theme = theme;
+
+    if (icon) {
+      icon.textContent = theme === "dark" ? "☾" : "☀";
+    }
+  };
+  const applyTheme = (theme, options = {}) => {
+    const persist = Boolean(options.persist);
+    const nextTheme = theme === "light" ? "light" : "dark";
+
+    document.documentElement.setAttribute("data-theme", nextTheme);
+    document.documentElement.style.colorScheme = nextTheme;
+    setThemeMetaColor(nextTheme);
+    syncThemeToggle(nextTheme);
+
+    if (!persist) {
+      return;
+    }
+
+    try {
+      window.localStorage.setItem(THEME_KEY, nextTheme);
+    } catch (error) {}
+  };
+  const initThemeToggle = () => {
+    const toggle = document.getElementById("theme-toggle");
+    applyTheme(getCurrentTheme());
+
+    if (toggle) {
+      toggle.addEventListener("click", () => {
+        const nextTheme = getCurrentTheme() === "dark" ? "light" : "dark";
+        applyTheme(nextTheme, { persist: true });
+      });
+    }
+
+    const handleSystemThemeChange = () => {
+      if (readStoredTheme()) {
+        return;
+      }
+      applyTheme(getSystemTheme());
+    };
+
+    if (themePreference.addEventListener) {
+      themePreference.addEventListener("change", handleSystemThemeChange);
+    } else if (themePreference.addListener) {
+      themePreference.addListener(handleSystemThemeChange);
+    }
+
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => {
+        document.documentElement.classList.add("theme-transitions");
+      });
+    });
+  };
   const readNumber = (value) => {
     if (value === undefined || value === null || value === "") {
       return null;
@@ -71,7 +163,7 @@
       return;
     }
 
-    if (prefersReducedMotion.matches || coarsePointer.matches) {
+    if (prefersReducedMotion.matches) {
       return;
     }
 
@@ -445,11 +537,11 @@
 
     const buildPoints = () => {
       const area = state.width * state.height;
-      const count = clamp(Math.round(area / 16000), 35, 120);
+      const count = clamp(Math.round(area / 24000), 24, 70);
       const minDim = Math.min(state.width, state.height);
-      const speedBase = minDim * 0.00035;
+      const speedBase = minDim * 0.0002;
 
-      state.linkDistance = minDim * 0.18;
+      state.linkDistance = minDim * 0.14;
       state.points = [];
 
       for (let i = 1; i <= count; i += 1) {
@@ -511,7 +603,7 @@
 
           if (distSq < linkDistanceSq) {
             const dist = Math.sqrt(distSq);
-            const alpha = (1 - dist / linkDistance) * 0.35;
+            const alpha = (1 - dist / linkDistance) * 0.18;
             context.strokeStyle = `rgba(255, 255, 255, ${alpha.toFixed(3)})`;
             context.lineWidth = 1;
             context.beginPath();
@@ -523,7 +615,7 @@
       }
 
       points.forEach((point) => {
-        const alpha = 0.5 + (point.radius - 0.8) * 0.25;
+        const alpha = 0.28 + (point.radius - 0.8) * 0.14;
         context.fillStyle = `rgba(255, 255, 255, ${alpha.toFixed(3)})`;
         context.beginPath();
         context.arc(point.x, point.y, point.radius, 0, Math.PI * 2);
@@ -564,7 +656,7 @@
   };
 
   const init = () => {
-    resolveTiltTargets().forEach(initTilt);
+    initThemeToggle();
     initScrollReveal();
     initSmoothScroll();
     initConstellation();

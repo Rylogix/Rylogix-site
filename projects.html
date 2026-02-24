@@ -34,7 +34,37 @@
       href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Inter:wght@400;500;600&display=swap"
     />
 
-    <link rel="stylesheet" href="css/styles.css?v=3" />
+    <script>
+      (function () {
+        const key = "rylogix-theme";
+        let theme = null;
+
+        try {
+          theme = localStorage.getItem(key);
+        } catch (error) {}
+
+        if (theme !== "light" && theme !== "dark") {
+          theme =
+            window.matchMedia &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches
+              ? "dark"
+              : "light";
+        }
+
+        document.documentElement.setAttribute("data-theme", theme);
+        document.documentElement.style.colorScheme = theme;
+
+        const metaTheme = document.querySelector('meta[name="theme-color"]');
+        if (metaTheme) {
+          metaTheme.setAttribute(
+            "content",
+            theme === "dark" ? "#0f1117" : "#f5f7fb"
+          );
+        }
+      })();
+    </script>
+
+    <link rel="stylesheet" href="css/styles.css?v=4" />
     <title>Projects | Rylogix</title>
   </head>
   <body>
@@ -54,6 +84,17 @@
           <a class="topbar-link" href="#projects">Projects</a>
         </nav>
         <div class="topbar-nav" aria-live="polite">
+          <button
+            class="theme-toggle"
+            id="theme-toggle"
+            type="button"
+            aria-pressed="false"
+            aria-label="Toggle color theme"
+            title="Toggle color theme"
+          >
+            <span class="theme-toggle-icon" aria-hidden="true">◐</span>
+            <span class="theme-toggle-text">Theme</span>
+          </button>
           <div class="visitor-card" role="status" aria-live="polite">
             <img
               class="visitor-icon"
@@ -270,7 +311,7 @@
       <div class="container">&copy; Rylogix. All rights reserved.</div>
     </footer>
 
-    <script src="js/effects.js" defer></script>
+    <script src="js/effects.js?v=4" defer></script>
     <script>
       (function() {
         const domain = encodeURIComponent(window.location.hostname);
