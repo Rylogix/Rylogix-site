@@ -2325,10 +2325,6 @@ body > footer {
   filter: none;
 }
 
-.home-logo {
-  filter: var(--icon-accent-filter);
-}
-
 .logo-fallback,
 .external-icon {
   color: var(--color-accent);
