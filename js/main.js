@@ -88,8 +88,6 @@ const discordText = document.querySelector(".discord-text");
 const presenceBadge = document.getElementById("presence-badge");
 const presenceIcon = document.getElementById("presence-icon");
 const presenceDot = document.getElementById("presence-dot");
-const heroStoryToggle = document.getElementById("hero-story-toggle");
-const heroStory = document.getElementById("hero-story");
 
 let spotifyProgressTimer = null;
 let spotifyProgressState = null;
@@ -196,54 +194,6 @@ const setScrollbarCompensation = () => {
 
 const resetScrollbarCompensation = () => {
   document.body.style.removeProperty("--scrollbar-comp");
-};
-
-// Hero story expand/collapse toggle.
-const setHeroStoryExpanded = (isExpanded) => {
-  if (!heroStory || !heroStoryToggle) {
-    return;
-  }
-
-  heroStoryToggle.setAttribute("aria-expanded", String(isExpanded));
-  heroStory.setAttribute("aria-hidden", String(!isExpanded));
-  heroStory.classList.toggle("is-expanded", isExpanded);
-
-  if (prefersReducedMotion.matches) {
-    heroStory.style.height = isExpanded ? "auto" : "0px";
-    return;
-  }
-
-  if (isExpanded) {
-    heroStory.style.height = `${heroStory.scrollHeight}px`;
-  } else {
-    heroStory.style.height = `${heroStory.scrollHeight}px`;
-    window.requestAnimationFrame(() => {
-      heroStory.style.height = "0px";
-    });
-  }
-};
-
-const syncHeroStoryHeight = () => {
-  if (!heroStory || !heroStory.classList.contains("is-expanded")) {
-    return;
-  }
-
-  if (prefersReducedMotion.matches) {
-    heroStory.style.height = "auto";
-    return;
-  }
-
-  heroStory.style.height = "auto";
-  heroStory.style.height = `${heroStory.scrollHeight}px`;
-};
-
-const handleHeroStoryToggle = () => {
-  if (!heroStoryToggle) {
-    return;
-  }
-
-  const isExpanded = heroStoryToggle.getAttribute("aria-expanded") === "true";
-  setHeroStoryExpanded(!isExpanded);
 };
 
 const uiToggleKeys = new Set();
@@ -1545,20 +1495,6 @@ if (supportModal) {
       closeSupportModal();
     }
   });
-}
-
-if (heroStoryToggle && heroStory) {
-  heroStory.style.height = "0px";
-  heroStoryToggle.addEventListener("click", handleHeroStoryToggle);
-  heroStory.addEventListener("transitionend", (event) => {
-    if (event.propertyName !== "height") {
-      return;
-    }
-    if (heroStory.classList.contains("is-expanded")) {
-      heroStory.style.height = "auto";
-    }
-  });
-  window.addEventListener("resize", syncHeroStoryHeight);
 }
 
 document.addEventListener("keydown", handleContactKeydown);
