@@ -938,24 +938,6 @@ button {
   object-fit: cover;
 }
 
-.project-media-placeholder {
-  display: grid;
-  place-items: center;
-  padding: 22px;
-  background:
-    radial-gradient(circle at top, rgba(245, 169, 39, 0.2), transparent 55%),
-    linear-gradient(135deg, rgba(23, 24, 34, 0.96), rgba(10, 11, 17, 0.98));
-}
-
-.project-media-site {
-  font-family: "Fredoka", sans-serif;
-  font-size: clamp(1.2rem, 2.4vw, 1.8rem);
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  color: #f7f2e8;
-  text-align: center;
-}
-
 .project-body {
   display: flex;
   flex-direction: column;
