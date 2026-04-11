@@ -36,30 +36,12 @@
 
     <script>
       (function () {
-        const key = "rylogix-theme";
-        let theme = null;
-
-        try {
-          theme = localStorage.getItem(key);
-        } catch (error) {}
-
-        if (theme !== "light" && theme !== "dark") {
-          theme =
-            window.matchMedia &&
-            window.matchMedia("(prefers-color-scheme: dark)").matches
-              ? "dark"
-              : "light";
-        }
-
-        document.documentElement.setAttribute("data-theme", theme);
-        document.documentElement.style.colorScheme = theme;
+        document.documentElement.setAttribute("data-theme", "dark");
+        document.documentElement.style.colorScheme = "dark";
 
         const metaTheme = document.querySelector('meta[name="theme-color"]');
         if (metaTheme) {
-          metaTheme.setAttribute(
-            "content",
-            theme === "dark" ? "#0f1117" : "#f5f7fb"
-          );
+          metaTheme.setAttribute("content", "#0f1117");
         }
       })();
     </script>
@@ -89,17 +71,6 @@
           <a class="topbar-link" id="projects-link" href="#projects">Projects</a>
         </nav>
         <div class="topbar-nav" aria-live="polite">
-          <button
-            class="theme-toggle"
-            id="theme-toggle"
-            type="button"
-            aria-pressed="false"
-            aria-label="Toggle color theme"
-            title="Toggle color theme"
-          >
-            <span class="theme-toggle-icon" aria-hidden="true">◐</span>
-            <span class="theme-toggle-text">Theme</span>
-          </button>
           <div class="visitor-card" role="status" aria-live="polite">
             <img
               class="visitor-icon"
@@ -256,6 +227,34 @@
                 <p class="project-category-label">Client Projects</p>
               </div>
               <div class="projects-grid">
+                <a
+                  class="project-card glow-card"
+                  href="https://gobleno.co.uk/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-reveal
+                  data-tilt-max="6"
+                  data-tilt-lift="4"
+                  data-tilt-scale="1.02"
+                  data-tilt-glow="0.35"
+                  data-tilt-hover-lift="4"
+                  data-tilt-hover-scale="1.02"
+                  data-tilt-hover-glow="0.25"
+                  aria-label="Open Gobleno website"
+                >
+                  <div class="project-media">
+                    <img
+                      src="assets/images/projects/gobleno.png"
+                      alt="Gobleno thumbnail"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </div>
+                  <div class="project-body">
+                    <h3>Gobleno.co.uk</h3>
+                    <p>Client website built for Gobleno.</p>
+                  </div>
+                </a>
                 <a
                   class="project-card glow-card"
                   href="https://talangray.com/"
