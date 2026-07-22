@@ -5,7 +5,7 @@
   --panel2: #303030;
   --text: #f7f4ee;
   --muted: #c7c2b6;
-  --accent: #ffd43b;
+  --accent: #f5a927;
   --border: #181818;
   --shadow: 0 14px 28px rgba(0, 0, 0, 0.6);
   --bg-deep: #1b1b1b;
@@ -1650,15 +1650,15 @@ button:focus-visible {
   --color-muted: #b8b8b3;
   --color-border: rgba(255, 255, 255, 0.1);
   --color-border-strong: rgba(255, 255, 255, 0.14);
-  --color-accent: #ffd43b;
-  --color-accent-contrast: #1c1800;
+  --color-accent: #ffa616;
+  --color-accent-contrast: #231500;
   --color-overlay: rgba(10, 10, 10, 0.58);
   --color-topbar: rgba(27, 27, 27, 0.86);
   --color-input: rgba(255, 255, 255, 0.03);
   --shadow-sm: 0 8px 22px rgba(0, 0, 0, 0.2);
   --shadow-md: 0 16px 40px rgba(0, 0, 0, 0.28);
   --shadow-lg: 0 24px 56px rgba(0, 0, 0, 0.34);
-  --ring: 0 0 0 3px rgba(255, 212, 59, 0.26);
+  --ring: 0 0 0 3px rgba(255, 166, 22, 0.24);
   --theme-fade-duration: 280ms;
   --theme-fade-ease: cubic-bezier(0.22, 1, 0.36, 1);
   --icon-accent-filter: brightness(0) saturate(100%) invert(73%) sepia(79%)
@@ -1687,15 +1687,15 @@ button:focus-visible {
   --color-muted: #5f5f5a;
   --color-border: rgba(32, 32, 32, 0.13);
   --color-border-strong: rgba(32, 32, 32, 0.2);
-  --color-accent: #e0b400;
-  --color-accent-contrast: #1c1800;
+  --color-accent: #ffa616;
+  --color-accent-contrast: #231500;
   --color-overlay: rgba(20, 20, 20, 0.2);
   --color-topbar: rgba(222, 222, 219, 0.86);
   --color-input: rgba(32, 32, 32, 0.03);
   --shadow-sm: 0 8px 20px rgba(0, 0, 0, 0.08);
   --shadow-md: 0 14px 36px rgba(0, 0, 0, 0.11);
   --shadow-lg: 0 24px 56px rgba(0, 0, 0, 0.14);
-  --ring: 0 0 0 3px rgba(224, 180, 0, 0.24);
+  --ring: 0 0 0 3px rgba(255, 166, 22, 0.22);
   --icon-accent-filter: brightness(0) saturate(100%) invert(73%) sepia(79%)
     saturate(1618%) hue-rotate(351deg) brightness(103%) contrast(102%);
 
