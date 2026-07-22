@@ -11,7 +11,6 @@
   const TILT_FALLBACK_SELECTORS = [
     ".hero-card",
     ".link-card",
-    ".visitor-card",
     ".contact-modal-inner",
   ];
 
