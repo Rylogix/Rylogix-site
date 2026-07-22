@@ -147,16 +147,17 @@
             <span class="underline"></span>
           </div>
           <div class="projects-layout">
-            <section class="project-category" aria-label="Personal Projects">
+            <section class="project-category" aria-label="Roblox Games">
               <div class="project-category-header" data-reveal>
-                <p class="project-category-label">Personal Projects</p>
+                <p class="project-category-label">Roblox Games</p>
               </div>
               <div class="projects-grid">
                 <a
-                  class="project-card glow-card"
-                  href="https://rylogix.github.io/AI-TicTacToe/"
+                  class="project-card glow-card roblox-game-card"
+                  href="https://www.roblox.com/games/98311703008851"
                   target="_blank"
                   rel="noopener noreferrer"
+                  data-roblox-game
                   data-reveal
                   data-tilt-max="6"
                   data-tilt-lift="4"
@@ -165,55 +166,31 @@
                   data-tilt-hover-lift="4"
                   data-tilt-hover-scale="1.02"
                   data-tilt-hover-glow="0.25"
-                  aria-label="Open AI-TicTacToe website"
+                  aria-label="Open Food Jackpot on Roblox"
                 >
                   <div class="project-media">
-                    <img
-                      src="assets/images/projects/ai-tictactoe.png"
-                      alt="AI-TicTacToe screenshot"
-                      loading="lazy"
-                      decoding="async"
-                    />
+                    <img data-roblox-icon alt="Food Jackpot game icon" />
                   </div>
                   <div class="project-body">
-                    <h3>AI-TicTacToe</h3>
-                    <p>The unbeatable tic-tac-toe site. Heads up, it's impossible.</p>
-                  </div>
-                </a>
-                <a
-                  class="project-card glow-card"
-                  href="https://ventboard.org/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  data-reveal
-                  data-tilt-max="6"
-                  data-tilt-lift="4"
-                  data-tilt-scale="1.02"
-                  data-tilt-glow="0.35"
-                  data-tilt-hover-lift="4"
-                  data-tilt-hover-scale="1.02"
-                  data-tilt-hover-glow="0.25"
-                  aria-label="Open Vent Board website"
-                >
-                  <div class="project-media">
-                    <img
-                      src="assets/images/projects/vent-board.png"
-                      alt="Vent Board screenshot"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </div>
-                  <div class="project-body">
-                    <h3>Vent Board</h3>
-                    <p>A place where people can vent publicly or anonymously.</p>
+                    <h3 data-roblox-name>Food Jackpot</h3>
+                    <div class="roblox-game-stats" aria-live="polite">
+                      <p>
+                        <span>Current CCU</span>
+                        <strong data-roblox-playing>Loading...</strong>
+                      </p>
+                      <p>
+                        <span>Total visits</span>
+                        <strong data-roblox-visits>Loading...</strong>
+                      </p>
+                    </div>
                   </div>
                 </a>
               </div>
             </section>
 
-            <section class="project-category" aria-label="Client Projects">
+            <section class="project-category" aria-label="Websites">
               <div class="project-category-header" data-reveal>
-                <p class="project-category-label">Client Projects</p>
+                <p class="project-category-label">Websites</p>
               </div>
               <div class="projects-grid">
                 <a
@@ -382,6 +359,7 @@
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
     <script src="js/main.js?v=4"></script>
+    <script src="js/roblox-game.js?v=1" defer></script>
     <script src="js/effects.js?v=4" defer></script>
   </body>
 </html>
