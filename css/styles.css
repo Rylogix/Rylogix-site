@@ -895,6 +895,16 @@ button {
   object-fit: cover;
 }
 
+.project-media.dubdub-media {
+  background: #f3c400;
+}
+
+.project-media.dubdub-media img {
+  box-sizing: border-box;
+  object-fit: contain;
+  padding: 10%;
+}
+
 .project-body {
   display: flex;
   flex-direction: column;
